@@ -1,0 +1,125 @@
+.responseComponent:hover {
+    /* box-shadow: rgba(245, 163, 83, .8) 0px 2px 20px 0px; */
+    cursor: pointer;
+}
+
+.responseComponent.show {
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+
+.responseComponent {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    box-shadow: rgba(245, 163, 83, .5) 0px 2px 20px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin-bottom: 20px;
+    font-size: 13px;
+    line-height: 1.65 !important;
+}
+
+/*
+.responseComponent::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    transform: translate(0px, 0px);
+    z-index: -1;
+    background: conic-gradient(from 90deg at 40% -25%, #ffd700, #f79d03, #ee6907, #e6390a, #de0d0d, #d61039, #cf1261, #c71585, #cf1261, #d61039, #de0d0d, #ee6907, #f79d03, #ffd700, #ffd700, #ffd700);
+    filter: blur(10px);
+    border-radius: 20px;
+  } 
+  */
+
+.text-skeleton {
+    background-color: rgba(0, 0, 0, 0.1);
+    position: relative;
+    height: 15px;
+    border-radius: 20px;
+    animation: fadeSkeleton 1s;
+    animation-timing-function: cubic-bezier(.73, .04, .29, .72);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    margin-left: 15px;
+
+}
+
+.text1 {
+    width: 65%;
+}
+
+.text2 {
+    width: 80%;
+    animation-delay: 2s
+}
+
+.text3 {
+    width: 50%;
+    animation-delay: 0.5s
+}
+
+@keyframes fadeSkeleton {
+    0% {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    100% {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+}
+
+@keyframes fadeSkeleton2 {
+    0% {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    100% {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+}
+
+strong {
+    background-color: #2A3F63;
+}
+
+/* .playButton.dark {
+    border: 1px solid white;
+}
+
+.playButton.light {
+    border: 1px solid black;
+
+} */
+
+.playButton {
+    display: inline-flex;
+    border-radius: 50px;
+    height: 10px;
+    width: auto;
+    padding: 2px 5px;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    margin-right: 5px;
+    color:#ED7557;
+    border: 1px solid #ED7557;
+
+}
+
+.playButton:hover {
+    background-color: #ED7557;
+    color: white;
+}
+
+/* .playButton.light:hover {
+    background-color: black;
+    color: white
+}
+
+.playButton.dark:hover {
+    background-color: white;
+    color: black
+} */

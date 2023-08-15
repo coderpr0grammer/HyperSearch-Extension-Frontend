@@ -1,0 +1,16 @@
+#login-main {
+    align-items: center;
+    background-color: white;
+    /* border: 1px solid rgba(0, 0, 0, 0.08); */
+    border-radius: 12px;
+    color: #C00C6D;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 12px;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+#google-login {
+    margin-top: 5px;
+}
