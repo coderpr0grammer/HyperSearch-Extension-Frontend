@@ -22,7 +22,11 @@
   /* control the offsets */
   z-index: -1;
   /* place the element behind */
-  background: conic-gradient(from 90deg at 40% -25%, #ffd700, #f79d03, #ee6907, #e6390a, #de0d0d, #d61039, #cf1261, #c71585, #cf1261, #d61039, #de0d0d, #ee6907, #f79d03, #ffd700, #ffd700, #ffd700);
+  /* background: conic-gradient(from 90deg at 40% -25%, #ffd700, #f79d03, #ee6907, #e6390a, #de0d0d, #d61039, #cf1261, #c71585, #cf1261, #d61039, #de0d0d, #ee6907, #f79d03, #ffd700, #ffd700, #ffd700);
+  filter: blur(20px);
+  border-radius: 20px; */
+
+  background: conic-gradient(from 90deg at 40% -25%,#ff7e00,#8903f7,#ee07d3,#0a8ee6,#0d91de,#1092d6,#0033ff,#00cfa4,#cf1261,#d61039,#ff0000,#ee6907,#f59b01,gold,gold,#cf6464);
   filter: blur(20px);
   border-radius: 20px;
 }
@@ -37,7 +41,8 @@
 }
 
 .countTitle {
-  font-family: monospace !important;
+  font-family: CohereText !important;
+  font-size: 70%;
 }
 
 .drawerButton {

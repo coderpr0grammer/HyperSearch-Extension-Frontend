@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, useContext, useCallback } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 // import logo from '../../assets/img/logo.svg';
 // import Greetings from '../../containers/Greetings/Greetings';
 import "./Youtube.css";
@@ -11,7 +17,11 @@ import "./Searchbar.css";
 import LoadingIcon from "./LoadingIcon.js";
 import { ColorThemeContext } from "./Extension";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronUp, faRightFromBracket, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronUp,
+  faRightFromBracket,
+  faChevronDown,
+} from "@fortawesome/free-solid-svg-icons";
 import { app, db } from "../../utils/firebaseConfig";
 import {
   getAuth,
@@ -20,11 +30,19 @@ import {
   onAuthStateChanged,
   signInWithCredential,
 } from "firebase/auth";
-import { collection, doc, setDoc, addDoc, onSnapshot, where, query, getDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  setDoc,
+  addDoc,
+  onSnapshot,
+  where,
+  query,
+  getDoc,
+} from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "../../utils/firebaseConfig";
 import { AuthenticationContext } from "../../infrastructure/authentication/authentication.context";
-
 
 const Youtube = () => {
   const [results, setResults] = useState([]);
@@ -40,8 +58,22 @@ const Youtube = () => {
   const divRef = useRef(null);
 
   const { dark, setDark } = useContext(ColorThemeContext);
-  const { user, setUser, subscribedToPro, userData, updateUserData, getUserData, searchesToday, setSearchesToday, setLimitReached, limitReached, lifetimeSearches, setLifetimeSearches, freeLimit, isAdmin} = useContext(AuthenticationContext);
-
+  const {
+    user,
+    setUser,
+    subscribedToPro,
+    userData,
+    updateUserData,
+    getUserData,
+    searchesToday,
+    setSearchesToday,
+    setLimitReached,
+    limitReached,
+    lifetimeSearches,
+    setLifetimeSearches,
+    freeLimit,
+    isAdmin,
+  } = useContext(AuthenticationContext);
 
   useEffect(() => {
     if (!errorContainer.current) return;
@@ -49,7 +81,6 @@ const Youtube = () => {
       errorContainer.current.style.opacity = 1;
     }, 0);
   }, [error]);
-
 
   const auth = getAuth();
 
@@ -64,6 +95,20 @@ const Youtube = () => {
       }}
       ref={extensionContainerRef}
     >
+       <div className="flex w-full bg-gray-200 rounded-full overflow-hidden h-4 mt-2">
+                    <div
+                      className="flex flex-col justify-center overflow-hidden bg-blue-500 text-xs text-white text-center"
+                      role="progressbar"
+                      style={{
+                        width: `${99}%`,
+                        transition: "width 0.3s",
+                      }}
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    >
+                      {99}%
+                    </div>
+                  </div>
       <Searchbar
         loading={loading}
         onSubmit={(query) => {
@@ -85,85 +130,136 @@ const Youtube = () => {
           setLoading(true);
           setShowResults(false);
 
-          const urlParams = new URLSearchParams(new URL(window.location.href).search);
-          console.log(urlParams)
-          const vid = urlParams.get('vid');
+          const urlParams = new URLSearchParams(
+            new URL(window.location.href).search
+          );
 
+          const vid = urlParams.get("vid");
 
-          // let parts = url.split("v=");
-          // let thepart = parts[1].split("&t=");
+          let data = {
+            indexName: "video-embeddings",
+            videoID: vid,
+            query: query,
+          };
 
-          // var videoId = thepart[0].split("&ab_channel")[0];
+          const url =
+            "http://127.0.0.1:5001/skm-extension-official/us-central1/streamedEmbedAndUpsert";
 
-          console.log(window.location.href)
-          console.log('video: ', vid)
+          fetch(url, {
+            method: "POST",
+            cache: "no-cache",
+            keepalive: true,
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "text/event-stream",
+            },
+            body: JSON.stringify(data),
+          })
+            .then(async (res) => {
+              const reader = res.body.getReader();
 
-          let json = { youtube_url: `https://www.youtube.com/watch?v=${vid}`, query: query };
+              while (true) {
+                setLoading(true);
+                const { value, done } = await reader.read();
 
-          fetch(
-            "https://pacific-woodland-70260.herokuapp.com/process_youtube_url",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(json),
-            }
-          )
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error(
-                  "Network response was not ok. Internal server error!"
-                );
-              }
-              return response.json();
-            })
-            .then((data) => {
-              if (data == "TranscriptError") {
-                setError("Subtitles not available or video is restricted");
-              } else if (data == "LengthError") {
-                setError(
-                  "Unfortunately for our Beta release we can't Skm videos cannot be longer than 2 hours"
-                );
-                console.log(error);
-              } else if (data == "ApiError") {
-                setError(
-                  "We had trouble processing this video. Please try again."
-                );
-              } else {
-                setResults(data.results.matches);
-                setDisplayNone(false);
-
-                console.log('userData, ', userData)
-
-                updateUserData({searchesToday: searchesToday + 1, lifetimeSearches: lifetimeSearches + 1})
-                setSearchesToday(searchesToday+1);
-                
-                if (freeLimit - searchesToday < 1 && !isAdmin) {
-                  setLimitReached(true)
+                if (done) {
+                  setLoading(false);
+                  break;
                 }
 
-                getUserData(user)
+                const response = JSON.parse(new TextDecoder().decode(value));
 
-                setTimeout(() => {
+                const { responseCode, data } = response;
+
+                if (responseCode === "ERROR") {
+                  setError(response.data.errorMessage);
                   setLoading(false);
-                  setShowResults(true);
-                }, 300);
+                  break;
+                } else if (responseCode === "SUCCESS") {
+                  if (data.percentage) {
+                    //still in progress
+                    console.log("progress: ", data.percentage);
+                  } else {
+                    console.log(data.searchResult);
+                    setResults(data.searchResult.matches);
+
+                setDisplayNone(false);
+
+                    setTimeout(() => {
+                      setLoading(false);
+                      setShowResults(true);
+                    }, 300);
+                    
+                  }
+                }
               }
-
-
-
-              setLoading(false);
             })
-            .catch(function (error) {
-              setLoading(false);
-              console.log("error message: " + error);
-              setError(error);
-              console.log("error: ", error);
-              setError(
-                "This video took a bit longer to process so please press Enter again to try and get results. If that doesn't work, we're probably experiencing issues with our servers."
-              );
+            .catch((err) => {
+              console.error("error fetching api: ", err);
+              setError(err)
             });
+
+          // fetch(
+          //   "http://127.0.0.1:5001/skm-extension-official/us-central1/youtubeTranscript/",
+          //   {
+          //     method: "POST",
+          //     headers: {
+          //       "Content-Type": "application/json",
+          //     },
+          //     body: JSON.stringify(json),
+          //   }
+          // )
+          //   .then(async (response) => {
+          //     if (!response.ok) {
+          //       const errResponse = await response.json()
+          //       throw new Error("Network response was not ok." + '\nError code ' + response.status + '\n' +  errResponse.response
+          //       );
+          //     }
+          //     return response.json();
+          //   })
+          //   .then((data) => {
+          //     if (data == "TranscriptError") {
+          //       setError("Subtitles not available or video is restricted");
+          //     } else if (data == "LengthError") {
+          //       setError(
+          //         "Unfortunately for our Beta release we can't Skm videos cannot be longer than 2 hours"
+          //       );
+          //       console.log(error);
+          //     } else if (data == "ApiError") {
+          //       setError(
+          //         "We had trouble processing this video. Please try again."
+          //       );
+          //     } else {
+          //       setResults(data.results.matches);
+          //       setDisplayNone(false);
+
+          //       console.log('userData, ', userData)
+
+          //       updateUserData({searchesToday: searchesToday + 1, lifetimeSearches: lifetimeSearches + 1})
+          //       setSearchesToday(searchesToday+1);
+
+          //       if (freeLimit - searchesToday < 1 && !isAdmin) {
+          //         setLimitReached(true)
+          //       }
+
+          //       getUserData(user)
+
+          //       setTimeout(() => {
+          //         setLoading(false);
+          //         setShowResults(true);
+          //       }, 300);
+          //     }
+
+          //     setLoading(false);
+          //   })
+          //   .catch(function (error) {
+          //     setLoading(false);
+          //     // setError(error);
+          //     console.error(error);
+          //     setError(
+          //       "This video took a bit longer to process so please press Enter again to try and get results. If that doesn't work, we're probably experiencing issues with our servers."
+          //     );
+          //   });
 
           // console.log(windowFind(query));
         }}
@@ -213,10 +309,10 @@ const Youtube = () => {
           </button>
           {results.map((item, index) => (
             <ResultComponent
-              content={item.metadata.text}
-              timeStampURL={item.metadata.url}
+              content={item.metadata.originalText}
+              timeStamp={Math.floor(item.metadata.timeStamp / 1000)}
               query={globalQuery}
-              key={index}
+              key={item.id}
               dark={dark}
               style={{
                 transitionDelay: `${(index + 1) * 0.06}s`,
@@ -236,8 +332,6 @@ const Youtube = () => {
           <p>{error}</p>
         </div>
       )}
-
-     
     </div>
   );
 };

@@ -12,13 +12,18 @@
 .responseComponent {
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
-    box-shadow: rgba(245, 163, 83, .5) 0px 2px 20px 0px;
+    box-shadow: rgba(89, 138, 238, 0.5) -2px 2px 0px 0px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     margin-bottom: 20px;
     font-size: 13px;
     line-height: 1.65 !important;
+    
+    font-family: CohereText;
+    font-weight:525;
+    font-variation-settings: normal !important;
+    font-variant-ligatures: normal !important;
 }
 
 /*
@@ -96,7 +101,7 @@ strong {
 
 .playButton {
     display: inline-flex;
-    border-radius: 50px;
+    border-radius: 2.5px;
     height: 10px;
     width: auto;
     padding: 2px 5px;
@@ -104,13 +109,13 @@ strong {
     justify-content: center;
     transition: 0.3s;
     margin-right: 5px;
-    color:#ED7557;
-    border: 1px solid #ED7557;
+    color:#598AEE;
+    border: 1px solid #598AEE;
 
 }
 
 .playButton:hover {
-    background-color: #ED7557;
+    background-color: #598AEE;
     color: white;
 }
 

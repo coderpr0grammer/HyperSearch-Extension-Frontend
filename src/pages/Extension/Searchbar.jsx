@@ -6,6 +6,8 @@ import LoadingIcon from "./LoadingIcon";
 import HamburgerMenu from "./HamburgerMenu";
 import { AuthenticationContext } from "../../infrastructure/authentication/authentication.context";
 
+import { faCrown } from "@fortawesome/free-solid-svg-icons";
+
 const Searchbar = (props) => {
   const [inputText, setInputText] = useState("");
   const inputRef = useRef(null);
@@ -21,7 +23,7 @@ const Searchbar = (props) => {
     freeLimit,
     limitReached,
     setLimitReached,
-    isAdmin
+    isAdmin,
   } = useContext(AuthenticationContext);
 
   const [textareaHeight, setTextareaHeight] = useState("auto");
@@ -44,37 +46,85 @@ const Searchbar = (props) => {
   }, []);
 
   const handle = () => console.log("Enter pressed");
-
+  
+  useEffect(()=> {
+    console.log(userData)
+  }, [userData])
 
   return (
     <>
-      {userData && (subscribedToPro || isAdmin) ? <div style={{ width: "100%", marginBottom: 10 }}>
-        <h4
-          className="countTitle"
-          style={{
-            margin: 0,
-            color: "#0a8ee6",
-            fontFamily: "monospace",
-            fontSize: "130%",
-          }}
-        >
-         ⚡ You're a Pro Skm-mer 😎 <br></br>Enjoy unlimited searches!
-        </h4>
-      </div> : (
+      {userData && (subscribedToPro) ? (
+        <div style={{ width: "100%", marginBottom: 10 }}>
+          <h4
+            className="countTitle"
+            style={{
+              margin: 0,
+              color: "#0a8ee6",
+            }}
+          >
+            <div
+              style={{
+                background: "white",
+                display: "inline-block",
+                borderRadius: 3,
+                padding: 3,
+              }}
+            >
+              <div
+                style={{
+                  display: "inline-block",
+                  background:
+                    "linear-gradient(to bottom right, #BA63E7 0%,#8903f7 20%,#ee07d3 40%,#0a8ee6 70%,#0d91de 80%,#0033ff 90%,#0033ff 60%,#BA63E7 100%)",
+                  WebkitBackgroundClip: "text",
+
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                <FontAwesomeIcon icon={faCrown} color="#C50CE0" /> HyperSearch
+                Pro:{" "}
+              </div>
+            </div>{" "}
+            Enjoy unlimited searches!
+          </h4>
+        </div>
+      ) : (
         <div style={{ width: "100%", marginBottom: 10 }}>
           <h4
             className="countTitle"
             style={{
               margin: 0,
               color: "#688EF9",
-              fontFamily: "monospace",
-              fontSize: "110%",
             }}
           >
-            {limitReached
-              ? `You've reached your daily search limit.<br />Upgrade to Pro to continue searching!`
-              : `You have ${freeLimit - searchesToday} search${freeLimit - searchesToday != 1 ? "es" : ""
-              } left today`}
+            {limitReached ? (
+              <div style={{fontSize: '120%'}}>
+                You've reached your daily search limit.
+                
+              </div>
+            ) : (
+              <div style={{fontSize: '120%'}}>
+              {`You have ${freeLimit - searchesToday} search${
+                freeLimit - searchesToday !== 1 ? "es" : ""
+              } remaining for today`}
+              </div>
+            )}
+                <div style={{fontSize: '120%', marginTop: 5}}>
+                Upgrade to{" "}
+                <div
+                  style={{
+                    display: "inline-block",
+                    background:
+                      "linear-gradient(to bottom right, #BA63E7 0%,#8903f7 20%,#ee07d3 40%,#0a8ee6 70%,#0d91de 80%,#0033ff 90%,#0033ff 60%,#BA63E7 100%)",
+                    WebkitBackgroundClip: "text",
+
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  <FontAwesomeIcon icon={faCrown} color="#C50CE0" /> HyperSearch
+                  Pro{" "}
+                </div>{" "}
+                {limitReached ? 'to continue searching!' : 'for unlimited searches!'}
+                </div>
           </h4>
         </div>
       )}
@@ -113,7 +163,7 @@ const Searchbar = (props) => {
               padding: 0,
               border: "none",
               display: "flex",
-              alignItems: "flex-start",
+              alignItems: "center",
               // cursor: "pointer",
               outline: "none",
               justifyContent: "center",
@@ -128,7 +178,7 @@ const Searchbar = (props) => {
           >
             {props.loading ? (
               <div style={{ marginLeft: 5, marginTop: 3 }}>
-                <LoadingIcon color="#ffffff" size={50} />
+                <LoadingIcon color="#ffffff" size={30} thickness={15} />
               </div>
             ) : (
               <FontAwesomeIcon
@@ -141,7 +191,7 @@ const Searchbar = (props) => {
                     ? "rgba(255, 255, 255, 0.4)"
                     : "rgba(255, 255, 255, 0.8)",
                   justifySelf: "center",
-                  alignSelf: 'center',
+                  alignSelf: "center",
                   marginLeft: 12,
                   // marginTop: props.active ? 13 : 12,
                   transition: "1s",
@@ -151,7 +201,7 @@ const Searchbar = (props) => {
           </button>
           <textarea
             name="text"
-            id="skm-textarea"
+            id="hypersearch-textarea"
             type="text"
             ref={inputRef}
             rows="1"
@@ -176,6 +226,8 @@ const Searchbar = (props) => {
               outline: "none",
               transition: "0.1s",
               color: "white",
+              fontFamily:
+                "CohereHeadline, CohereVariable, CircularRegular !important",
               fontWeight: 600,
             }}
             placeholder="HyperSearch this video"
@@ -191,7 +243,6 @@ const Searchbar = (props) => {
                     } else {
                       if (isAdmin) {
                         props.onSubmit(inputText);
-
                       } else {
                         if (searchesToday < freeLimit) {
                           props.onSubmit(inputText);
@@ -199,7 +250,6 @@ const Searchbar = (props) => {
                           setLimitReached(true);
                         }
                       }
-                      
                     }
                   }
                 }

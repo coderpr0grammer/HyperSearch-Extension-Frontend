@@ -22,7 +22,8 @@
 }
 
 .open .bar:nth-child(1) {
-    transform: translateY(6px) rotate(45deg);
+    width: 20px !important;
+    transform: translate(-2px, 6px) rotate(45deg) !important; 
 }
 
 .open .bar:nth-child(2) {
@@ -30,7 +31,9 @@
 }
 
 .open .bar:nth-child(3) {
-    transform: translateY(-6px) rotate(-45deg);
+    width: 20px !important; 
+
+    transform: translate(-2px, -6px) rotate(-45deg) !important;
 }
 
 .menu {

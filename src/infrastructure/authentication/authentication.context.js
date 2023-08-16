@@ -43,7 +43,7 @@ const AuthenticationContextProvider = ({ children }) => {
 
   const startDataListeners = (u) => {
     const customersRef = collection(db, "customers");
-    const customerDoc = doc(customersRef, u.uid);
+    const customerDoc = doc(customersRef, auth.currentUser.uid);
     const subscriptionsCollection = collection(customerDoc, "subscriptions");
     const subscriptionQuery = query(
       subscriptionsCollection,
@@ -51,15 +51,19 @@ const AuthenticationContextProvider = ({ children }) => {
     );
 
     onSnapshot(subscriptionQuery, async (snapshot) => {
+
+      console.log(snapshot.empty)
       if (snapshot.empty) {
         //not subscribed
 
-        getUserData2(u);
+        getUserData2(auth.currentUser);
 
         // getUserData();
       } else {
         //subbed
         const subscription = snapshot.docs[0].data();
+        getUserData2(auth.currentUser);
+
         setSubscribedToPro(true);
       }
     });
@@ -69,7 +73,7 @@ const AuthenticationContextProvider = ({ children }) => {
 
 
   const getUserData2 = async (u) => {
-    const docRef = doc(db, "users", u.uid);
+    const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const docSnapData = docSnap.data()
@@ -78,7 +82,7 @@ const AuthenticationContextProvider = ({ children }) => {
       setUserData(docSnapData)
       setSearchesToday(docSnapData.searchesToday)
       setLifetimeSearches(docSnapData.lifetimeSearches)
-      setIsAdmin(u.email == 'skm123naj@gmail.com')
+      setIsAdmin(auth.currentUser.email == 'danielgorg9@gmail.com')
 
       const lastSearchesReset = docSnapData.lastSearchesReset;
 
@@ -108,7 +112,7 @@ const AuthenticationContextProvider = ({ children }) => {
       setUserData(docSnapData)
       setSearchesToday(docSnapData.searchesToday)
       setLifetimeSearches(docSnapData.lifetimeSearches)
-      setIsAdmin(u.email == 'skm123naj@gmail.com')
+      setIsAdmin(u.email == 'danielgorg9@gmail.com')
 
       const lastSearchesReset = docSnapData.lastSearchesReset;
 

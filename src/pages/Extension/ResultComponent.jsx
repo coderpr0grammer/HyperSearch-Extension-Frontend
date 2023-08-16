@@ -75,7 +75,7 @@ const ResultComponent = (props) => {
   const handleButtonClick = () => {
     const video = document.querySelector('video');
 
-    let seconds = extractTimeFromYoutubeUrl(props.timeStampURL);
+   const seconds = props.timeStamp;
 
     // console.log(video.currentTime = seconds);
 
@@ -89,7 +89,7 @@ const ResultComponent = (props) => {
         width: '100%',
         background: 'transparent',
         minHeight: 100,
-        borderRadius: 10,
+        borderRadius: 0,
         boxSizing: 'border-box',
         padding: 15,
         ...props.style,
@@ -108,9 +108,9 @@ const ResultComponent = (props) => {
             }}
           />
           &nbsp;
-          {convertSecondsToTimestamp(extractTimeFromYoutubeUrl(props.timeStampURL))}
+          {convertSecondsToTimestamp(props.timeStamp)}
         </div>
-        <p style={{ color: '#ED7557', display: 'inline' }}>{props.content}</p>
+        <p style={{ color: '#598AEE', display: 'inline', fontFamily: 'CohereText !important'}}>{props.content}</p>
       </div>
     </div>
   );
