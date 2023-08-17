@@ -97,18 +97,18 @@ const Searchbar = (props) => {
             }}
           >
             {limitReached ? (
-              <div style={{fontSize: '120%'}}>
+              <div style={{fontSize: '120%', fontWeight: 500}}>
                 You've reached your daily search limit.
                 
               </div>
             ) : (
-              <div style={{fontSize: '120%'}}>
+              <div style={{fontSize: '120%', fontWeight: 500}}>
               {`You have ${freeLimit - searchesToday} search${
                 freeLimit - searchesToday !== 1 ? "es" : ""
               } remaining for today`}
               </div>
             )}
-                <div style={{fontSize: '120%', marginTop: 5}}>
+                <div style={{fontSize: '120%', marginTop: 5, fontWeight: 500}}>
                 Upgrade to{" "}
                 <div
                   style={{
@@ -118,6 +118,7 @@ const Searchbar = (props) => {
                     WebkitBackgroundClip: "text",
 
                     WebkitTextFillColor: "transparent",
+                    fontWeight: 700
                   }}
                 >
                   <FontAwesomeIcon icon={faCrown} color="#C50CE0" /> HyperSearch
