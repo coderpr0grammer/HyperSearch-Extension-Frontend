@@ -132,7 +132,7 @@ const Youtube = () => {
           };
 
           const url =
-            "http://127.0.0.1:5001/skm-extension-official/us-central1/streamedEmbedAndUpsert";
+            "https://streamedembedandupsert-i7nkqebqsa-uc.a.run.app";
 
           fetch(url, {
             method: "POST",
