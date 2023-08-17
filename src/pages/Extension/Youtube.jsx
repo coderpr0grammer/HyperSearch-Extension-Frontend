@@ -43,6 +43,7 @@ import {
 import { httpsCallable } from "firebase/functions";
 import { functions } from "../../utils/firebaseConfig";
 import { AuthenticationContext } from "../../infrastructure/authentication/authentication.context";
+import ProgressBar from "./ProgressBar";
 
 const Youtube = () => {
   const [results, setResults] = useState([]);
@@ -53,6 +54,7 @@ const Youtube = () => {
   // const [dark, setDark] = useState(false);
   const [displayNone, setDisplayNone] = useState(true);
   const [globalQuery, setGlobalQuery] = useState("");
+  const [upsertProgress, setUpsertProgress] = useState(0)
   const extensionContainerRef = useRef(null);
   const errorContainer = useRef(null);
   const divRef = useRef(null);
@@ -95,20 +97,7 @@ const Youtube = () => {
       }}
       ref={extensionContainerRef}
     >
-       <div className="flex w-full bg-gray-200 rounded-full overflow-hidden h-4 mt-2">
-                    <div
-                      className="flex flex-col justify-center overflow-hidden bg-blue-500 text-xs text-white text-center"
-                      role="progressbar"
-                      style={{
-                        width: `${99}%`,
-                        transition: "width 0.3s",
-                      }}
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    >
-                      {99}%
-                    </div>
-                  </div>
+     
       <Searchbar
         loading={loading}
         onSubmit={(query) => {
@@ -179,7 +168,8 @@ const Youtube = () => {
                   if (data.percentage) {
                     //still in progress
                     console.log("progress: ", data.percentage);
-                  } else {
+                    setUpsertProgress(data.percentage)
+                  } else if (data.searchResult) {
                     console.log(data.searchResult);
                     setResults(data.searchResult.matches);
 
@@ -264,6 +254,7 @@ const Youtube = () => {
           // console.log(windowFind(query));
         }}
       />
+      {(upsertProgress !== 0 && upsertProgress !== 100) && <ProgressBar color="#A5DDD7" progress={upsertProgress}/> }
 
       {!error && results.length > 0 && (
         <>

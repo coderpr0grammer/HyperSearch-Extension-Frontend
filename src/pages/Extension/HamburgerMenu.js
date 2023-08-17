@@ -89,8 +89,10 @@ const HamburgerMenu = () => {
     const urlParams = new URLSearchParams(new URL(window.location.href).search);
     const vid = urlParams.get("vid");
 
+    const hyperSearchProPrice = "price_1NfXm9IA7oe9PnQH8XRNgKtB"
+
     const docRef = await addDoc(checkout_sessions_ref, {
-      price: "price_1NfYNzIA7oe9PnQHXAOLVnGJ",
+      price: hyperSearchProPrice,
       success_url: vid
         ? `https://youtube.com/watch?v=${vid}`
         : "https://youtube.com",
