@@ -164,7 +164,8 @@ const Youtube = () => {
 
                 if (responseCode === "ERROR") {
                   console.log(response)
-                  // setError(response.data.errorMessage);
+                  setError(response.data.errorMessage);
+                  alert(response.data.errorMessage)
                   setLoading(false);
                   break;
                 } else if (responseCode === "SUCCESS") {
