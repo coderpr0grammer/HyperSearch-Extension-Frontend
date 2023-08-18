@@ -134,6 +134,8 @@ const Youtube = () => {
           const url =
             "https://streamedembedandupsert-i7nkqebqsa-uc.a.run.app";
 
+            const urlTest = 'http://127.0.0.1:5001/skm-extension-official/us-central1/streamedEmbedAndUpsert'
+
           fetch(url, {
             method: "POST",
             cache: "no-cache",
@@ -161,7 +163,8 @@ const Youtube = () => {
                 const { responseCode, data } = response;
 
                 if (responseCode === "ERROR") {
-                  setError(response.data.errorMessage);
+                  console.log(response)
+                  // setError(response.data.errorMessage);
                   setLoading(false);
                   break;
                 } else if (responseCode === "SUCCESS") {

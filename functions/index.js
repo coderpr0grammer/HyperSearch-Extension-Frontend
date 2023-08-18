@@ -297,7 +297,7 @@ exports.streamedEmbedAndUpsert = onRequest(
         console.error("Error:", error.message);
         sendEventStreamData({
           responseCode: "ERROR",
-          data: { errorMessage: error },
+          data: { errorMessage: error.toString() },
         });
       }
     });
