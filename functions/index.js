@@ -69,17 +69,21 @@ const getEmbedding = async (input) => {
 };
 
 const search = async (index, videoID, queryEmbedding) => {
-  const queryResponse = await index.query({
-    queryRequest: {
-      namespace: videoID,
-      vector: queryEmbedding,
-      topK: 5,
-      // includeValues: true,
-      includeMetadata: true,
-    },
-  });
+  try {
+    const queryResponse = await index.query({
+      queryRequest: {
+        namespace: videoID,
+        vector: queryEmbedding,
+        topK: 5,
+        // includeValues: true,
+        includeMetadata: true,
+      },
+    });
 
-  return queryResponse;
+    return queryResponse;
+  } catch (err) {
+    throw new Error(err);
+  }
 };
 
 const reformChunks = (transcript) => {
@@ -226,7 +230,7 @@ exports.streamedEmbedAndUpsert = onRequest(
 
           const { embedding } = await getEmbedding(query);
 
-        //   console.log("queryembedding", embedding);
+          //   console.log("queryembedding", embedding);
 
           const searchResult = await search(index, videoID, embedding);
 

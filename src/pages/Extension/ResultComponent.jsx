@@ -6,7 +6,7 @@ import { ColorThemeContext } from './Extension';
 
 const ResultComponent = (props) => {
   const { dark } = useContext(ColorThemeContext);
-  console.log(props.dark);
+  // console.log(props.dark);
 
   const player = useRef(null);
 
