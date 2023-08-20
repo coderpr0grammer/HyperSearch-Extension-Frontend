@@ -54,7 +54,7 @@ const Youtube = () => {
   // const [dark, setDark] = useState(false);
   const [displayNone, setDisplayNone] = useState(true);
   const [globalQuery, setGlobalQuery] = useState("");
-  const [upsertProgress, setUpsertProgress] = useState(0)
+  const [upsertProgress, setUpsertProgress] = useState(0);
   const extensionContainerRef = useRef(null);
   const errorContainer = useRef(null);
   const divRef = useRef(null);
@@ -97,7 +97,6 @@ const Youtube = () => {
       }}
       ref={extensionContainerRef}
     >
-     
       <Searchbar
         loading={loading}
         onSubmit={(query) => {
@@ -131,10 +130,10 @@ const Youtube = () => {
             query: query,
           };
 
-          const url =
-            "https://streamedembedandupsert-i7nkqebqsa-uc.a.run.app";
+          const url = "https://streamedembedandupsert-i7nkqebqsa-uc.a.run.app";
 
-            const urlTest = 'http://127.0.0.1:5001/skm-extension-official/us-central1/streamedEmbedAndUpsert'
+          const urlTest =
+            "http://127.0.0.1:5001/skm-extension-official/us-central1/streamedEmbedAndUpsert";
 
           fetch(urlTest, {
             method: "POST",
@@ -162,35 +161,36 @@ const Youtube = () => {
 
                 const { responseCode, data } = response;
 
+                console.log(response);
+
                 if (responseCode === "ERROR") {
-                  console.log(response)
                   setError(response.data.errorMessage);
-                  alert(response.data.errorMessage)
+                  alert(response.data.errorMessage);
                   setLoading(false);
                   break;
                 } else if (responseCode === "SUCCESS") {
                   if (data.percentage) {
                     //still in progress
                     console.log("progress: ", data.percentage);
-                    setUpsertProgress(data.percentage)
+                    setUpsertProgress(data.percentage);
                   } else if (data.searchResult) {
                     console.log(data.searchResult);
                     setResults(data.searchResult.matches);
 
-                setDisplayNone(false);
+                    setDisplayNone(false);
 
                     setTimeout(() => {
                       setLoading(false);
                       setShowResults(true);
                     }, 300);
-                    
                   }
                 }
               }
             })
             .catch((err) => {
               console.error("error fetching api: ", err);
-              setError(err.toString())
+              setError('We had trouble processing this video. Please try again later or contact support at danielgorg9@gmail.com. Sorry for the inconvenience!');
+              setLoading(false);
             });
 
           // fetch(
@@ -258,7 +258,9 @@ const Youtube = () => {
           // console.log(windowFind(query));
         }}
       />
-      {(upsertProgress !== 0 && upsertProgress !== 100) && <ProgressBar color="#A5DDD7" progress={upsertProgress}/> }
+      {upsertProgress !== 0 && upsertProgress !== 100 && (
+        <ProgressBar color="#A5DDD7" progress={upsertProgress} />
+      )}
 
       {!error && results.length > 0 && (
         <>

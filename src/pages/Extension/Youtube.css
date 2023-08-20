@@ -62,16 +62,14 @@
 
 .errorContainer {
   opacity: 0;
-  border-radius: 10px;
-  color: #ED7557;
+  color: rgb(89, 138, 238);
   padding: 10px;
   transition: opacity 0.3s ease-in-out;
-  box-shadow: rgba(245, 163, 83, .8) 0px 2px 20px 0px;
+  box-shadow: rgba(89, 138, 238, 0.5) -2px 2px 0px 0px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   margin-bottom: 20px;
-  border-radius: 10px;
 }
 
 /* 

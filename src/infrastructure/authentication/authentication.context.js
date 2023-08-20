@@ -82,7 +82,7 @@ const AuthenticationContextProvider = ({ children }) => {
       setUserData(docSnapData)
       setSearchesToday(docSnapData.searchesToday)
       setLifetimeSearches(docSnapData.lifetimeSearches)
-      setIsAdmin(auth.currentUser.email == 'danielgorg9@gmail.com')
+      setIsAdmin(auth.currentUser.email === 'danielgorg9@gmail.com')
 
       const lastSearchesReset = docSnapData.lastSearchesReset;
 
