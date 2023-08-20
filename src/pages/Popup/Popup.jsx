@@ -27,7 +27,7 @@ const Popup = () => {
         height: '100vh',
         boxSizing: 'border-box',
         borderImage:
-          'linear-gradient(to bottom right, #FF914D 0%, #F67B30 50%, #EF2E2E 100%) 1',
+          'conic-gradient(from 90deg at 40% -25%,#ff7e00,#8903f7,#ee07d3,#0a8ee6,#0d91de,#1092d6,#03f,#00cfa4,#cf1261,#d61039,red,#ee6907,#f59b01,gold,gold,#cf6464) 1',
       }}
     >
       <h4
@@ -36,7 +36,7 @@ const Popup = () => {
         style={{
           fontFamily: "monospace, 'Expletus Sans', Roboto !important",
           background:
-            'linear-gradient(to bottom right, #FF914D 0%, #F67B30 50%, #EF2E2E 100%)',
+            '#10CCA3',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           marginBottom: 0
@@ -50,7 +50,7 @@ const Popup = () => {
         style={{
           fontFamily: "monospace, 'Expletus Sans', Roboto !important",
           background:
-            'linear-gradient(to bottom right, #FF914D 0%, #F67B30 50%, #EF2E2E 100%)',
+            'conic-gradient(from 90deg at 40% -25%,#ff7e00,#8903f7,#ee07d3,#0a8ee6,#0d91de,#1092d6,#03f,#00cfa4,#cf1261,#d61039,red,#ee6907,#f59b01,gold,gold,#cf6464)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           marginTop: 0,
@@ -58,7 +58,7 @@ const Popup = () => {
           fontWeight: 800,
         }}
       >
-        {'{ SkmAI }'}
+        {'HyperSearch'}
 
       </h1>
       <h4
@@ -69,7 +69,7 @@ const Popup = () => {
           fontWeight: 800,
           fontFamily: "monospace, 'Expletus Sans', Roboto",
           background:
-            'linear-gradient(to bottom right, #FF914D 0%, #F67B30 50%, #EF2E2E 100%)',
+            '#10CCA3',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
         }}
@@ -110,12 +110,12 @@ const Popup = () => {
           marginBottom: 5,
           fontFamily: "monospace, 'Expletus Sans', Roboto",
           background:
-            'linear-gradient(to bottom right, #FF914D 0%, #F67B30 50%, #EF2E2E 100%)',
+            '#10CCA3',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
         }}
       >
-        Thank you for downloading the SkmAI Extension! {/*<strong style={{ textDecoration: 'underline' }}>ai</strong>{' '}/*/}
+        Thank you for downloading the HyperSearch Extension! {/*<strong style={{ textDecoration: 'underline' }}>ai</strong>{' '}/*/}
       </h4>
       <small
         className="popup-gradient-title"
@@ -126,12 +126,12 @@ const Popup = () => {
           fontWeight: 800,
           fontFamily: "monospace, 'Expletus Sans', Roboto",
           background:
-            'linear-gradient(to bottom right, #FF914D 0%, #F67B30 50%, #EF2E2E 100%)',
+          "conic-gradient(from 90deg at 40% -25%,#ff7e00,#8903f7,#ee07d3,#0a8ee6,#0d91de,#1092d6,#03f,#00cfa4,#cf1261,#d61039,red,#ee6907,#f59b01,gold,gold,#cf6464)",
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
         }}
       >
-        made with 🧡 from the SkmAI team {/*<strong style={{ textDecoration: 'underline' }}>ai</strong>{' '}/*/}
+        made with 🩵 from the SkmAI team {/*<strong style={{ textDecoration: 'underline' }}>ai</strong>{' '}/*/}
       </small>
 
 

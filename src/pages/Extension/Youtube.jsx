@@ -190,7 +190,7 @@ const Youtube = () => {
             })
             .catch((err) => {
               console.error("error fetching api: ", err);
-              setError(err)
+              setError(err.toString())
             });
 
           // fetch(
