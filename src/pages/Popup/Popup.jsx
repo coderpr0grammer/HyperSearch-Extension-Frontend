@@ -9,7 +9,7 @@ import './Popup.css';
 import LoginUI from '../../assets/loginUI.png'
 import SearchbarPicture from '../../assets/Searchbar.png'
 // import ResultSnapshot1 from '../../assets/img/ResultSnapshot1.png';
-import ResultSnapshot2 from '../../assets/ResultSnapshot2.png';
+import ResultSnapshot from '../../assets/ResultSnapshotHyperSearch.png';
 
 
 const Popup = () => {
@@ -81,11 +81,12 @@ const Popup = () => {
         <li>Hop on any video on Youtube</li>
         <li>Continue with your Google Account<img src={LoginUI} style={{ borderRadius: 12, width: '90%', marginTop: 5 }} /></li>
         <li>Search for anything as you would ask a person!
+          <br></br>
           <img src={SearchbarPicture} style={{ height: 60, borderRadius: 20, marginLeft: -15 }} />
           <br></br>
           You'll get the top relevant results in the video, even if it never mentions the words in your search!
           <br></br>
-          <img src={ResultSnapshot2} style={{ borderRadius: 10, width: '90%', marginTop: 10, marginBottom: 10, boxShadow: '0 2px 20px 0 rgba(245,163,83,.5)' }} />
+          <img src={ResultSnapshot} style={{ width: '90%', marginTop: 10, marginBottom: 10, }} />
           <br></br>
           Just click the result and it will take you to the relevant timestamp!
         </li>
