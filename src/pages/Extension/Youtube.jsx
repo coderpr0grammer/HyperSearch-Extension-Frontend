@@ -135,7 +135,7 @@ const Youtube = () => {
           const urlTest =
             "http://127.0.0.1:5001/skm-extension-official/us-central1/streamedEmbedAndUpsert";
 
-          fetch(url, {
+          fetch(urlTest, {
             method: "POST",
             cache: "no-cache",
             keepalive: true,
@@ -189,7 +189,9 @@ const Youtube = () => {
             })
             .catch((err) => {
               console.error("error fetching api: ", err);
-              setError('We had trouble processing this video. Please try again later or contact support at danielgorg9@gmail.com. Sorry for the inconvenience!');
+              setError(
+                "We had trouble processing this video. Please try again later or contact support at danielgorg9@gmail.com. Sorry for the inconvenience!"
+              );
               setLoading(false);
             });
 

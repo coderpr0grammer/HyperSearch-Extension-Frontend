@@ -33,7 +33,7 @@ exports.youtubeTranscript = onRequest((req, res) => {
   }
 
   cors(req, res, () => {
-    YoutubeTranscript.fetchTranscript(req.query.videoID)
+    YoutubeTranscript.fetchTranscript(req.query.videoID, [{lang: 'en', country: 'US'}])
       .then((response) => {
         res.send(response);
       })
@@ -48,9 +48,8 @@ const getVideoTranscript = async (videoID) => {
   if (!videoID) {
     throw new Error("Missing video ID when trying to get transcript");
   }
-
   try {
-    const response = await YoutubeTranscript.fetchTranscript(videoID);
+    const response = await YoutubeTranscript.fetchTranscript(videoID, [{lang: 'en', country: 'US'}]);
     return response;
   } catch (err) {
     throw new Error(`Could not get transcript for video ${videoID} : ` + err.message);
@@ -168,6 +167,14 @@ const checkIfNamespaceExists = async (index, namespace) => {
 exports.deleteNamespaceVectors = onRequest((req, res) => {
   cors(req, res, async () => {
     const { videoID } = req.body;
+    const deleteResponse = await deleteNamespaceVectors(videoID);
+    res.send(deleteResponse);
+  });
+});
+
+exports.deleteNamespaceVectorsGET = onRequest((req, res) => {
+  cors(req, res, async () => {
+    const { videoID } = req.query;
     const deleteResponse = await deleteNamespaceVectors(videoID);
     res.send(deleteResponse);
   });
