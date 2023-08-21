@@ -132,7 +132,7 @@ const Popup = () => {
           WebkitTextFillColor: 'transparent',
         }}
       >
-        made with 🩵 from the SkmAI team {/*<strong style={{ textDecoration: 'underline' }}>ai</strong>{' '}/*/}
+        made with 🩵 from the HyperSearch team {/*<strong style={{ textDecoration: 'underline' }}>ai</strong>{' '}/*/}
       </small>
 
 
