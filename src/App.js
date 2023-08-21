@@ -14,7 +14,7 @@ function App() {
 
     const height = entries[0].target.offsetHeight;
 
-      window.parent.postMessage({"type": "resize", height}, "*");
+      window.parent.postMessage({"type": "hypersearch-resize", height}, "*");
     
     setPrevHeight(height);
   }, [prevHeight]);

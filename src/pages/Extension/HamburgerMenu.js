@@ -50,10 +50,10 @@ const HamburgerMenu = () => {
     const docHeight = document.documentElement.offsetHeight;
 
     if (isOpen) {
-      window.parent.postMessage({ type: "resize", height: docHeight }, "*");
+      window.parent.postMessage({ type: "hypersearch-resize", height: docHeight }, "*");
     } else {
       window.parent.postMessage(
-        { type: "resize", height: docHeight + menuRef.current.offsetHeight },
+        { type: "hypersearch-resize", height: docHeight + menuRef.current.offsetHeight },
         "*"
       );
     }
@@ -74,7 +74,7 @@ const HamburgerMenu = () => {
         : "https://youtube.com",
     });
     // window.open(data.url)
-    window.parent.postMessage({ type: "open_sub_portal", url: data.url }, "*");
+    window.parent.postMessage({ type: "hypersearch-open_sub_portal", url: data.url }, "*");
     setIsOpeningSubPortal(false)
 
   };
@@ -108,7 +108,7 @@ const HamburgerMenu = () => {
       }
       if (url) {
         // We have a Stripe Checkout URL, let's redirect.
-        window.parent.postMessage({ type: "stripe_checkout_skm", url }, "*");
+        window.parent.postMessage({ type: "hypersearch-stripe_checkout_skm", url }, "*");
         setIsOpeningSubCheckout(false);
       }
     });

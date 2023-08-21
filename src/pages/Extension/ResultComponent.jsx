@@ -79,7 +79,7 @@ const ResultComponent = (props) => {
 
     // console.log(video.currentTime = seconds);
 
-    window.parent.postMessage({"type": "jumpToTime", seconds}, "*");
+    window.parent.postMessage({"type": "hypersearch-jumpToTime", seconds}, "*");
   };
 
 
