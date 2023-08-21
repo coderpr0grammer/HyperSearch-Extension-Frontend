@@ -53,7 +53,7 @@ const getVideoTranscript = async (videoID) => {
     const response = await YoutubeTranscript.fetchTranscript(videoID);
     return response;
   } catch (err) {
-    throw new Error("Could not get transcript: " + err.message);
+    throw new Error(`Could not get transcript for video ${videoID} : ` + err.message);
   }
 };
 
