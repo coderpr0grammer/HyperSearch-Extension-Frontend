@@ -261,7 +261,7 @@ const Youtube = () => {
         }}
       />
       {upsertProgress !== 0 && upsertProgress !== 100 && (
-        <ProgressBar color="#A5DDD7" progress={upsertProgress} />
+        <ProgressBar color="#e575e8" progress={upsertProgress} />
       )}
 
       {!error && results.length > 0 && (
