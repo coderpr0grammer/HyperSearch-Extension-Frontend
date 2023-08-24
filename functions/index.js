@@ -33,7 +33,7 @@ exports.youtubeTranscript = onRequest((req, res) => {
   }
 
   cors(req, res, () => {
-    YoutubeTranscript.fetchTranscript(req.query.videoID, [{lang: 'en', country: 'US'}])
+    YoutubeTranscript.fetchTranscript(req.query.videoID)
       .then((response) => {
         res.send(response);
       })
