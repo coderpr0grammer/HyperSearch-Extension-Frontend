@@ -48,12 +48,16 @@ const getVideoTranscript = async (videoID) => {
   if (!videoID) {
     throw new Error("Missing video ID when trying to get transcript");
   }
-  try {
-    const response = await YoutubeTranscript.fetchTranscript(videoID, [{lang: 'en', country: 'US'}]);
-    return response;
-  } catch (err) {
-    throw new Error(`Could not get transcript for video ${videoID} : ` + err.message);
-  }
+  return YoutubeTranscript.fetchTranscript(videoID)
+    .then((response) => {
+      console.log(response);
+      return response;
+    })
+    .catch((err) => {
+      throw new Error(
+        `Could not get transcript for video ${videoID} : ` + err.message
+      );
+    });
 };
 
 const getEmbedding = async (input) => {
@@ -250,7 +254,8 @@ exports.streamedEmbedAndUpsert = onRequest(
           //upsert and query
 
           let transcript = await getVideoTranscript(videoID);
-          transcript = await reformChunks(transcript);
+          console.log(transcript)
+          transcript = reformChunks(transcript);
           let embeddingRefs = [];
 
           embedTranscript(
