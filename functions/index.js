@@ -253,8 +253,19 @@ exports.streamedEmbedAndUpsert = onRequest(
         } else {
           //upsert and query
 
-          let transcript = await getVideoTranscript(videoID);
-          console.log(transcript)
+          const youtubeTranscriptApiURl = `https://yt-transcript-api.vercel.app/api/?videoID=${videoID}`;
+
+          let transcript = await fetch(youtubeTranscriptApiURl)
+            .then((response) => response.json())
+            .then((res) => {
+              if (res.responseCode == "ERROR") {
+                throw new Error(res.response);
+              } else {
+                return res.response;
+              }
+            });
+
+          console.log(transcript);
           transcript = reformChunks(transcript);
           let embeddingRefs = [];
 

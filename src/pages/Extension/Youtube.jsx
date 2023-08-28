@@ -124,16 +124,17 @@ const Youtube = () => {
 
           const vid = urlParams.get("vid");
 
+          const url = "https://streamedembedandupsert-i7nkqebqsa-uc.a.run.app/";
+
+          const urlTest =
+            "http://127.0.0.1:5001/skm-extension-official/us-central1/streamedEmbedAndUpsert";
+
+
           let data = {
             indexName: "video-embeddings",
             videoID: vid,
             query: query,
           };
-
-          const url = "https://streamedembedandupsert-i7nkqebqsa-uc.a.run.app/";
-
-          const urlTest =
-            "http://127.0.0.1:5001/skm-extension-official/us-central1/streamedEmbedAndUpsert";
 
           fetch(url, {
             method: "POST",
@@ -194,70 +195,6 @@ const Youtube = () => {
               );
               setLoading(false);
             });
-
-          // fetch(
-          //   "http://127.0.0.1:5001/skm-extension-official/us-central1/youtubeTranscript/",
-          //   {
-          //     method: "POST",
-          //     headers: {
-          //       "Content-Type": "application/json",
-          //     },
-          //     body: JSON.stringify(json),
-          //   }
-          // )
-          //   .then(async (response) => {
-          //     if (!response.ok) {
-          //       const errResponse = await response.json()
-          //       throw new Error("Network response was not ok." + '\nError code ' + response.status + '\n' +  errResponse.response
-          //       );
-          //     }
-          //     return response.json();
-          //   })
-          //   .then((data) => {
-          //     if (data == "TranscriptError") {
-          //       setError("Subtitles not available or video is restricted");
-          //     } else if (data == "LengthError") {
-          //       setError(
-          //         "Unfortunately for our Beta release we can't Skm videos cannot be longer than 2 hours"
-          //       );
-          //       console.log(error);
-          //     } else if (data == "ApiError") {
-          //       setError(
-          //         "We had trouble processing this video. Please try again."
-          //       );
-          //     } else {
-          //       setResults(data.results.matches);
-          //       setDisplayNone(false);
-
-          //       console.log('userData, ', userData)
-
-          //       updateUserData({searchesToday: searchesToday + 1, lifetimeSearches: lifetimeSearches + 1})
-          //       setSearchesToday(searchesToday+1);
-
-          //       if (freeLimit - searchesToday < 1 && !isAdmin) {
-          //         setLimitReached(true)
-          //       }
-
-          //       getUserData(user)
-
-          //       setTimeout(() => {
-          //         setLoading(false);
-          //         setShowResults(true);
-          //       }, 300);
-          //     }
-
-          //     setLoading(false);
-          //   })
-          //   .catch(function (error) {
-          //     setLoading(false);
-          //     // setError(error);
-          //     console.error(error);
-          //     setError(
-          //       "This video took a bit longer to process so please press Enter again to try and get results. If that doesn't work, we're probably experiencing issues with our servers."
-          //     );
-          //   });
-
-          // console.log(windowFind(query));
         }}
       />
       {upsertProgress !== 0 && upsertProgress !== 100 && (
