@@ -9,6 +9,7 @@
     padding: 12px;
     -webkit-user-select: none;
     user-select: none;
+    box-shadow: inset #ffb1ffbd 0px 0px 10px;
 }
 
 #google-login {
