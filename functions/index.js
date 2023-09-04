@@ -19,7 +19,12 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const cors = require("cors")({ origin: true });
+const cors = require("cors")({
+  origin: [
+    "https://hypersearch-extension-frontend.vercel.app",
+    "https://hypersearch-extension-frontend.vercel.app/",
+  ],
+});
 
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
@@ -213,101 +218,40 @@ exports.streamedEmbedAndUpsert = onRequest(
     memory: "1GiB",
   },
   (req, res) => {
-    cors(req, res, async () => {
-      res.setHeader("Content-Type", "text/event-stream");
-      res.setHeader("Cache-Control", "no-cache");
-      res.setHeader("Connection", "keep-alive");
-      res.setHeader("Access-Control-Allow-Origin", "*");
-      res.flushHeaders();
+    console.log("request", req.method);
+    if (req.method === "POST" || req.method === "OPTIONS") {
+      cors(req, res, async () => {
+        res.setHeader("Content-Type", "text/event-stream");
+        res.setHeader("Cache-Control", "no-cache");
+        res.setHeader("Connection", "keep-alive");
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.flushHeaders();
 
-      const sendEventStreamData = (data) => {
-        res.write(`${JSON.stringify(data)}\n\n`);
-      };
+        const sendEventStreamData = (data) => {
+          res.write(`${JSON.stringify(data)}\n\n`);
+        };
 
-      let { indexName, videoID, query } = req.body;
+        let { indexName, videoID, query } = req.body;
 
-      try {
-        let index = await getIndexRef(indexName);
+        try {
+          let index = await getIndexRef(indexName);
 
-        const doesNamespaceExist = await checkIfNamespaceExists(index, videoID);
+          const doesNamespaceExist = await checkIfNamespaceExists(
+            index,
+            videoID
+          );
 
-        console.log("does namespace exist", doesNamespaceExist);
+          console.log("does namespace exist", doesNamespaceExist);
 
-        if (doesNamespaceExist) {
-          //only query
-          console.log("namespace exists");
-          //   const deleteResponse = await deleteNamespaceVectors(videoID);
-          //   console.log(deleteResponse);
-
-          const { embedding } = await getEmbedding(query);
-
-          //   console.log("queryembedding", embedding);
-
-          const searchResult = await search(index, videoID, embedding);
-
-          sendEventStreamData({
-            responseCode: "SUCCESS",
-            data: { searchResult },
-          });
-          res.end();
-        } else {
-          //upsert and query
-
-          const youtubeTranscriptApiURl = `https://yt-transcript-api.vercel.app/api/?videoID=${videoID}`;
-
-          let transcript = await fetch(youtubeTranscriptApiURl)
-            .then((response) => response.json())
-            .then((res) => {
-              if (res.responseCode == "ERROR") {
-                throw new Error(res.response);
-              } else {
-                return res.response;
-              }
-            });
-
-          console.log(transcript);
-          transcript = reformChunks(transcript);
-          let embeddingRefs = [];
-
-          embedTranscript(
-            transcript,
-            async (segment, embedding, embeddingID, percentage) => {
-              const { text, offset } = segment;
-
-              const upsertRequest = {
-                vectors: [
-                  {
-                    id: embeddingID,
-                    values: embedding,
-                    metadata: {
-                      videoID: videoID,
-                      originalText: text,
-                      timeStamp: offset,
-                    },
-                  },
-                ],
-                namespace: videoID,
-              };
-
-              embeddingRefs.push(embeddingID);
-
-              await index.upsert({ upsertRequest });
-              console.log("done upsert: " + percentage + "%");
-
-              sendEventStreamData({
-                responseCode: "SUCCESS",
-                data: { percentage },
-              });
-            }
-          ).then(async () => {
-            // await sendEventStreamData({
-            //   responseCode: "SUCCESS",
-            //   data: {
-            //     embeddingRefs,
-            //   },
-            // });
+          if (doesNamespaceExist) {
+            //only query
+            console.log("namespace exists");
+            //   const deleteResponse = await deleteNamespaceVectors(videoID);
+            //   console.log(deleteResponse);
 
             const { embedding } = await getEmbedding(query);
+
+            //   console.log("queryembedding", embedding);
 
             const searchResult = await search(index, videoID, embedding);
 
@@ -315,18 +259,88 @@ exports.streamedEmbedAndUpsert = onRequest(
               responseCode: "SUCCESS",
               data: { searchResult },
             });
-
-            console.log("ending res");
             res.end();
+          } else {
+            //upsert and query
+
+            const youtubeTranscriptApiURl = `https://yt-transcript-api.vercel.app/api/?videoID=${videoID}`;
+
+            let transcript = await fetch(youtubeTranscriptApiURl)
+              .then((response) => response.json())
+              .then((res) => {
+                if (res.responseCode == "ERROR") {
+                  throw new Error(res.response);
+                } else {
+                  return res.response;
+                }
+              });
+
+            console.log(transcript);
+            transcript = reformChunks(transcript);
+            let embeddingRefs = [];
+
+            embedTranscript(
+              transcript,
+              async (segment, embedding, embeddingID, percentage) => {
+                const { text, offset } = segment;
+
+                const upsertRequest = {
+                  vectors: [
+                    {
+                      id: embeddingID,
+                      values: embedding,
+                      metadata: {
+                        videoID: videoID,
+                        originalText: text,
+                        timeStamp: offset,
+                      },
+                    },
+                  ],
+                  namespace: videoID,
+                };
+
+                embeddingRefs.push(embeddingID);
+
+                await index.upsert({ upsertRequest });
+                console.log("done upsert: " + percentage + "%");
+
+                sendEventStreamData({
+                  responseCode: "SUCCESS",
+                  data: { percentage },
+                });
+              }
+            ).then(async () => {
+              // await sendEventStreamData({
+              //   responseCode: "SUCCESS",
+              //   data: {
+              //     embeddingRefs,
+              //   },
+              // });
+
+              const { embedding } = await getEmbedding(query);
+
+              const searchResult = await search(index, videoID, embedding);
+
+              sendEventStreamData({
+                responseCode: "SUCCESS",
+                data: { searchResult },
+              });
+
+              console.log("ending res");
+              res.end();
+            });
+          }
+        } catch (error) {
+          console.error("Error:", error.message);
+          sendEventStreamData({
+            responseCode: "ERROR",
+            data: { errorMessage: error.toString() },
           });
+          res.end();
         }
-      } catch (error) {
-        console.error("Error:", error.message);
-        sendEventStreamData({
-          responseCode: "ERROR",
-          data: { errorMessage: error.toString() },
-        });
-      }
-    });
+      });
+    } else {
+      res.status(405).send("Method Not Allowed");
+    }
   }
 );
