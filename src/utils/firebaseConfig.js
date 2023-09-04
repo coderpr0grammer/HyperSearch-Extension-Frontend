@@ -8,14 +8,16 @@ import { getFunctions } from "firebase/functions"
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const { REACT_APP_apiKey, REACT_APP_authDomain, REACT_APP_projectId, REACT_APP_storageBucket, REACT_APP_messagingSenderId, REACT_APP_appId, REACT_APP_measurementId } = process.env
+
 const firebaseConfig = {
-  apiKey: "AIzaSyCWRh1dorXANIxmMIHoUTcOAjcDmj5dOR8",
-  authDomain: "skm-extension-official.firebaseapp.com",
-  projectId: "skm-extension-official",
-  storageBucket: "skm-extension-official.appspot.com",
-  messagingSenderId: "173016892459",
-  appId: "1:173016892459:web:a7bfb3456c526c2a8a966e",
-  measurementId: "G-6VJSX11TV9"
+  apiKey: REACT_APP_apiKey,
+  authDomain: REACT_APP_authDomain,
+  projectId: REACT_APP_projectId,
+  storageBucket: REACT_APP_storageBucket,
+  messagingSenderId: REACT_APP_messagingSenderId,
+  appId: REACT_APP_appId,
+  measurementId: REACT_APP_measurementId
 };
 
 
