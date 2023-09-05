@@ -39,6 +39,7 @@ import {
   where,
   query,
   getDoc,
+  updateDoc
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import { FieldValue } from "firebase/firestore";
@@ -63,6 +64,7 @@ const Youtube = () => {
   const { dark, setDark } = useContext(ColorThemeContext);
   const {
     user,
+    uid,
     setUser,
     subscribedToPro,
     userData,
@@ -185,11 +187,14 @@ const Youtube = () => {
                       setLoading(false);
                       setShowResults(true);
                     }, 300);
-                    
-                    updateUserData({
+
+                    const userRef = doc(db, 'users', user.uid);
+
+                    const update = await updateDoc(userRef, {
                       searchesToday: FieldValue.increment(1),
                       lifetimeSearches: FieldValue.increment(1)
                     })
+                    
 
                     if (freeLimit - searchesToday < 1 && !isAdmin) {
                       setLimitReached(true)
