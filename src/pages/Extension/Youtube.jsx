@@ -66,7 +66,7 @@ const Youtube = () => {
     subscribedToPro,
     userData,
     updateUserData,
-    getUserData2,
+    getUserData,
     searchesToday,
     setSearchesToday,
     setLimitReached,
@@ -185,14 +185,7 @@ const Youtube = () => {
                       setShowResults(true);
                     }, 300);
 
-                    updateUserData({searchesToday: searchesToday + 1, lifetimeSearches: lifetimeSearches + 1})
-                    setSearchesToday(searchesToday+1);
                     
-                    if (freeLimit - searchesToday < 1 && !isAdmin) {
-                      setLimitReached(true)
-                    }
-    
-                    getUserData2(user)
                   }
                 }
               }
