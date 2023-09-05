@@ -108,7 +108,7 @@ const HamburgerMenu = () => {
       }
       if (url) {
         // We have a Stripe Checkout URL, let's redirect.
-        window.parent.postMessage({ type: "hypersearch-stripe_checkout_skm", url }, "*");
+        window.parent.postMessage({ type: "hypersearch-stripe_checkout", url }, "*");
         setIsOpeningSubCheckout(false);
       }
     });

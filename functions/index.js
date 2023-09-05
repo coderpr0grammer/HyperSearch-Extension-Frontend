@@ -23,7 +23,10 @@ const cors = require("cors")({
   origin: "https://hypersearch-extension-frontend.vercel.app",
 });
 
-const allowedOrigins = ["https://hypersearch-extension-frontend.vercel.app"];
+const allowedOrigins = [
+  "https://hypersearch-extension-frontend.vercel.app",
+  "http://localhost:3000",
+];
 
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
@@ -248,17 +251,17 @@ exports.streamedEmbedAndUpsert = onRequest(
         return;
       }
 
-      // if (!allowedOrigins.includes(req.headers.origin)) {
-      //   console.log("origin: ", req.headers.origin);
-      //   sendEventStreamData({
-      //     responseCode: "ERROR",
-      //     response: "Unauthorized request",
-      //   });
+      if (!allowedOrigins.includes(req.headers.origin)) {
+        console.log("origin: ", req.headers.origin);
+        sendEventStreamData({
+          responseCode: "ERROR",
+          data: { errorMessage: "Unauthorized request" },
+        });
 
-      //   // res.status(403).json({ error: "Unauthorized request" });
-      //   res.end();
-      //   return;
-      // }
+        // res.status(403).json({ error: "Unauthorized request" });
+        res.end();
+        return;
+      }
 
       let { indexName, videoID, query } = req.body;
 
@@ -275,16 +278,19 @@ exports.streamedEmbedAndUpsert = onRequest(
           //   const deleteResponse = await deleteNamespaceVectors(videoID);
           //   console.log(deleteResponse);
 
-          const { embedding } = await getEmbedding(query);
+            const { embedding } = await getEmbedding(query);
 
-          //   console.log("queryembedding", embedding);
+              // console.log("queryembedding", embedding);
 
-          const searchResult = await search(index, videoID, embedding);
+            const searchResult = await search(index, videoID, embedding);
 
-          sendEventStreamData({
-            responseCode: "SUCCESS",
-            data: { searchResult },
-          });
+            console.log(searchResult)
+
+            sendEventStreamData({
+              responseCode: "SUCCESS",
+              data: { searchResult },
+            })
+
           res.end();
         } else {
           //upsert and query

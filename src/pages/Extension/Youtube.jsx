@@ -41,6 +41,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
+import { FieldValue } from "firebase/firestore";
 import { functions } from "../../utils/firebaseConfig";
 import { AuthenticationContext } from "../../infrastructure/authentication/authentication.context";
 import ProgressBar from "./ProgressBar";
@@ -66,7 +67,7 @@ const Youtube = () => {
     subscribedToPro,
     userData,
     updateUserData,
-    getUserData,
+    getUserData2,
     searchesToday,
     setSearchesToday,
     setLimitReached,
@@ -184,7 +185,17 @@ const Youtube = () => {
                       setLoading(false);
                       setShowResults(true);
                     }, 300);
+                    
+                    updateUserData({
+                      searchesToday: FieldValue.increment(1),
+                      lifetimeSearches: FieldValue.increment(1)
+                    })
 
+                    if (freeLimit - searchesToday < 1 && !isAdmin) {
+                      setLimitReached(true)
+                    }
+
+                    getUserData2()
                     
                   }
                 }
