@@ -190,15 +190,15 @@ const Youtube = () => {
 
                     const userRef = doc(db, 'users', user.uid);
 
-                    // const update = await updateDoc(userRef, {
-                    //   searchesToday: increment(1),
-                    //   lifetimeSearches: increment(1)
-                    // })
-                    
-                    updateUserData({
+                    const update = await updateDoc(userRef, {
                       searchesToday: increment(1),
                       lifetimeSearches: increment(1)
                     })
+                    
+                    // updateUserData({
+                    //   searchesToday: increment(1),
+                    //   lifetimeSearches: increment(1)
+                    // })
 
                     if (freeLimit - searchesToday < 1 && !isAdmin) {
                       setLimitReached(true)
