@@ -194,6 +194,8 @@ const Youtube = () => {
                       searchesToday: increment(1),
                       lifetimeSearches: increment(1)
                     })
+
+                    setSearchesToday(searchesToday+1)
                     
 
                     if (freeLimit - searchesToday < 1 && !isAdmin) {
