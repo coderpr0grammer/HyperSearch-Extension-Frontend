@@ -39,10 +39,10 @@ import {
   where,
   query,
   getDoc,
-  updateDoc
+  updateDoc,
+  increment
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
-import { increment } from "firebase/firestore";
 import { functions } from "../../utils/firebaseConfig";
 import { AuthenticationContext } from "../../infrastructure/authentication/authentication.context";
 import ProgressBar from "./ProgressBar";
@@ -188,19 +188,19 @@ const Youtube = () => {
                       setShowResults(true);
                     }, 300);
 
-                    const userRef = doc(db, 'users', user.uid);
+                    // const userRef = doc(db, 'users', user.uid);
 
-                    const update = await updateDoc(userRef, {
-                      searchesToday: increment(1),
-                      lifetimeSearches: increment(1)
-                    })
+                    // const update = await updateDoc(userRef, {
+                    //   searchesToday: increment(1),
+                    //   lifetimeSearches: increment(1)
+                    // })
                     
 
-                    if (freeLimit - searchesToday < 1 && !isAdmin) {
-                      setLimitReached(true)
-                    }
+                    // if (freeLimit - searchesToday < 1 && !isAdmin) {
+                    //   setLimitReached(true)
+                    // }
 
-                    getUserData2()
+                    // getUserData2()
                     
                   }
                 }
