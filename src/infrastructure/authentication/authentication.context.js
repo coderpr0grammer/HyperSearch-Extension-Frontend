@@ -30,7 +30,7 @@ const AuthenticationContextProvider = ({ children }) => {
   const [searchesToday, setSearchesToday] = useState(0);
   const [limitReached, setLimitReached] = useState(false);
   const [lifetimeSearches, setLifetimeSearches] = useState(0);
-  const freeLimit = 20;
+  const freeLimit = 10;
   const [isAdmin, setIsAdmin] = useState(false)
 
 
