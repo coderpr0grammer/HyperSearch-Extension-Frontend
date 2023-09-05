@@ -39,10 +39,10 @@ import {
   where,
   query,
   getDoc,
-  updateDoc
+  updateDoc,
+  increment
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
-import { FieldValue } from "firebase/firestore";
 import { functions } from "../../utils/firebaseConfig";
 import { AuthenticationContext } from "../../infrastructure/authentication/authentication.context";
 import ProgressBar from "./ProgressBar";
@@ -191,13 +191,13 @@ const Youtube = () => {
                     const userRef = doc(db, 'users', user.uid);
 
                     const update = await updateDoc(userRef, {
-                      searchesToday: FieldValue.increment(1),
-                      lifetimeSearches: FieldValue.increment(1)
+                      searchesToday: increment(1),
+                      lifetimeSearches: increment(1)
                     })
                     
                     updateUserData({
-                      searchesToday: FieldValue.increment(1),
-                      lifetimeSearches: FieldValue.increment(1)
+                      searchesToday: increment(1),
+                      lifetimeSearches: increment(1)
                     })
 
                     if (freeLimit - searchesToday < 1 && !isAdmin) {
