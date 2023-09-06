@@ -3,6 +3,7 @@ import "./ResultComponent.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { ColorThemeContext } from "./Extension";
+import './SummaryComponent.css'
 
 const SummaryComponent = (props) => {
   const { dark } = useContext(ColorThemeContext);
@@ -21,7 +22,7 @@ const SummaryComponent = (props) => {
       }}
       className={`responseComponent ${props.className}`}
     >
-      <h4 className="summarized-response-title">Summarized Response</h4>
+      <h3 className="summarized-response-title">Summarized Response</h3>
       <div style={{ display: "inline" }}>
         <p
           style={{
