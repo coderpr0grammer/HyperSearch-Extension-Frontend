@@ -59,9 +59,9 @@ const Youtube = () => {
   const [globalQuery, setGlobalQuery] = useState("");
   const [upsertProgress, setUpsertProgress] = useState(0);
   const [summarizedResponse, setSummarizedResponse] = useState("");
+  const [resultsContainerRef] = useRef(null)
+  const [moreResultsOpacity, setMoreResultsOpacity] = useState(1)
   const extensionContainerRef = useRef(null);
-  const resultsContainerRef = useRef(null)
-  const moreResultsRef = useRef(null)
 
   const errorContainer = useRef(null);
   const divRef = useRef(null);
@@ -102,9 +102,9 @@ const Youtube = () => {
 
       if (scrollPercentage > 1) {
         console.log('Scroll position is greater than 50%');
-        moreResultsRef.current.style.opacity = 0
+        setMoreResultsOpacity(0)
       } else {
-        moreResultsRef.current.style.opacity = 1
+        setMoreResultsOpacity(1)
       }
     };
 
@@ -320,7 +320,7 @@ const Youtube = () => {
             ))}
             <div
               classname="more-results"
-              ref={moreResultsRef}
+              style={{opacity: moreResultsOpacity}}
             ></div>
           </div>
         </>
