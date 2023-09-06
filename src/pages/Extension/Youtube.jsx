@@ -102,10 +102,11 @@ const Youtube = () => {
       const scrollPercentage =
         (scrollTop / (scrollHeight - clientHeight)) * 100;
 
-      if (scrollPercentage > 1) {
-        setMoreResultsOpacity(1)
-      } else {
+    
+      if (resultsContainer.scrollTop !== 0) {
         setMoreResultsOpacity(0)
+      } else {
+        setMoreResultsOpacity(1)
       }
     };
 
