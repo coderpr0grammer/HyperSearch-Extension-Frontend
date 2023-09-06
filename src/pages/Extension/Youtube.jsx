@@ -40,7 +40,7 @@ import {
   query,
   getDoc,
   updateDoc,
-  increment
+  increment,
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "../../utils/firebaseConfig";
@@ -58,7 +58,7 @@ const Youtube = () => {
   const [displayNone, setDisplayNone] = useState(true);
   const [globalQuery, setGlobalQuery] = useState("");
   const [upsertProgress, setUpsertProgress] = useState(0);
-  const [summarizedResponse, setSummarizedResponse] = useState('')
+  const [summarizedResponse, setSummarizedResponse] = useState("");
   const extensionContainerRef = useRef(null);
   const errorContainer = useRef(null);
   const divRef = useRef(null);
@@ -134,12 +134,11 @@ const Youtube = () => {
           const urlTest =
             "http://127.0.0.1:5001/skm-extension-official/us-central1/streamedEmbedAndUpsert";
 
-
           let data = {
             indexName: "video-embeddings",
             videoID: vid,
             query: query,
-            subscribedToPro: subscribedToPro
+            subscribedToPro: subscribedToPro,
           };
 
           fetch(urlTest, {
@@ -183,7 +182,7 @@ const Youtube = () => {
                   } else if (data.searchResult) {
                     console.log(data);
 
-                    setSummarizedResponse(data.summarizedResponse)
+                    setSummarizedResponse(data.summarizedResponse);
                     setResults(data.searchResult.matches);
 
                     setDisplayNone(false);
@@ -193,22 +192,20 @@ const Youtube = () => {
                       setShowResults(true);
                     }, 300);
 
-                    const userRef = doc(db, 'users', user.uid);
+                    const userRef = doc(db, "users", user.uid);
 
                     const update = await updateDoc(userRef, {
                       searchesToday: increment(1),
-                      lifetimeSearches: increment(1)
-                    })
+                      lifetimeSearches: increment(1),
+                    });
 
-                    setSearchesToday(searchesToday+1)
-                    
+                    setSearchesToday(searchesToday + 1);
 
                     if (freeLimit - searchesToday < 1 && !isAdmin) {
-                      setLimitReached(true)
+                      setLimitReached(true);
                     }
 
                     // getUserData2()
-
                   }
                 }
               }
@@ -268,30 +265,32 @@ const Youtube = () => {
               &nbsp;{displayNone ? "Show Results" : "Hide results"}&nbsp;
             </p>
           </button>
-          
-          <SummaryComponent
-          style={{
-            transitionDelay: `${(1) * 0.06}s`,
-                display: displayNone ? "none" : "block",
-          }}
-          className={`${showResults ? "show" : ""}`}
-          content={summarizedResponse}
-          
-          />
-          {results.map((item, index) => (
-            <ResultComponent
-              content={item.metadata.originalText}
-              timeStamp={Math.floor(item.metadata.timeStamp / 1000)}
-              query={globalQuery}
-              key={item.id}
-              dark={dark}
+
+          <div className="results-container">
+            <SummaryComponent
               style={{
-                transitionDelay: `${(index + 1) * 0.06}s`,
+                transitionDelay: `${1 * 0.06}s`,
                 display: displayNone ? "none" : "block",
               }}
               className={`${showResults ? "show" : ""}`}
+              content={summarizedResponse}
             />
-          ))}
+
+            {results.map((item, index) => (
+              <ResultComponent
+                content={item.metadata.originalText}
+                timeStamp={Math.floor(item.metadata.timeStamp / 1000)}
+                query={globalQuery}
+                key={item.id}
+                dark={dark}
+                style={{
+                  transitionDelay: `${(index + 1) * 0.06}s`,
+                  display: displayNone ? "none" : "block",
+                }}
+                className={`${showResults ? "show" : ""}`}
+              />
+            ))}
+          </div>
         </>
       )}
       {error && (
