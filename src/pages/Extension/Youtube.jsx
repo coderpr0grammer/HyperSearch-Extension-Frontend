@@ -131,7 +131,7 @@ const Youtube = () => {
   useEffect(() => {
     (async () => {
       const idToken = await auth.currentUser.getIdToken();
-      console.log(idToken)
+      // console.log(idToken)
       setIdToken(idToken);
     })();
   }, [auth.currentUser]);

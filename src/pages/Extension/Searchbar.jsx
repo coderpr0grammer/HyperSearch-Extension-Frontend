@@ -47,9 +47,7 @@ const Searchbar = (props) => {
 
   const handle = () => console.log("Enter pressed");
   
-  useEffect(()=> {
-    console.log(userData)
-  }, [userData])
+
 
   return (
     <>

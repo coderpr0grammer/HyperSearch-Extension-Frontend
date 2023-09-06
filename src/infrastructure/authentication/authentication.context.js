@@ -84,15 +84,15 @@ const AuthenticationContextProvider = ({ children }) => {
       setLifetimeSearches(docSnapData.lifetimeSearches)
       setIsAdmin(auth.currentUser.email === 'danielgorg9@gmail.com')
 
+
       const lastSearchesReset = docSnapData.lastSearchesReset;
 
       const d = new Date();
       const today = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
-      console.log(lastSearchesReset, today)
+      console.log('reset', lastSearchesReset, today)
 
-
-      if (lastSearchesReset != today) {
-        updateUserData({ searchesToday: 0, lastSearchesReset: today })
+      if (lastSearchesReset !== today) {
+        await updateUserData({ searchesToday: 0, lastSearchesReset: today })
       }
 
     } else {
