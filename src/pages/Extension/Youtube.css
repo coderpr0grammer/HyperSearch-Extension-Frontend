@@ -117,11 +117,11 @@
 }
 
 .more-results.light {
-  background: linear-gradient(0deg, white 25%, transparent);
+  background: linear-gradient(0deg, white, transparent);
 }
 
 .more-results.dark {
-  background: linear-gradient(0deg, #0F0F0F 25%, transparent);
+  background: linear-gradient(0deg, #0F0F0F, transparent);
 }
 
 
