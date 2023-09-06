@@ -109,7 +109,7 @@ const Youtube = () => {
         resultsContainer.removeEventListener('scroll', handleScroll);
       };
     }
-  }, []);
+  }, [showResults]);
 
   const auth = getAuth();
 
