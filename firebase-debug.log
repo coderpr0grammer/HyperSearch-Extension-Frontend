@@ -209,3 +209,93 @@ Issues? Report them at https://github.com/firebase/firebase-tools/issues and att
 [debug] [2023-09-06T03:45:36.305Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-streamedEmbedAndUpsert"},"extension":{},"message":"Finishing up request with event=finish"}}
 [debug] [2023-09-06T03:45:36.305Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-streamedEmbedAndUpsert"},"extension":{},"message":"Finishing up request with event=close"}}
 [debug] [2023-09-06T03:45:36.305Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2023-09-06T03:47:59.581Z] File /Users/danielmartinez/Documents/GitHub/HyperSearch-Extension-Frontend/functions/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/danielmartinez/Documents/GitHub/HyperSearch-Extension-Frontend/functions/index.js changed, reloading triggers"}}
+[debug] [2023-09-06T03:48:00.636Z] Validating nodejs source
+[debug] [2023-09-06T03:48:01.902Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "@pinecone-database/pinecone": "^0.1.6",
+    "cors": "^2.8.5",
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.3.1",
+    "openai": "^3.3.0",
+    "uuid": "^9.0.0",
+    "uuidv4": "^6.2.13",
+    "youtube-transcript": "^1.0.6"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2023-09-06T03:48:01.902Z] Building nodejs source
+[debug] [2023-09-06T03:48:01.902Z] Failed to find version of module node: reached end of search path /Users/danielmartinez/Documents/GitHub/HyperSearch-Extension-Frontend/functions/node_modules
+[info] ✔  functions: Using node@18 from host. 
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2023-09-06T03:48:01.904Z] Could not find functions.yaml. Must use http discovery
+[debug] [2023-09-06T03:48:01.906Z] Found firebase-functions binary at '/Users/danielmartinez/Documents/GitHub/HyperSearch-Extension-Frontend/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8007
+
+[debug] [2023-09-06T03:48:02.390Z] Got response from /__/functions.yaml {"endpoints":{"youtubeTranscript":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"youtubeTranscript"},"deleteNamespaceVectors":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"deleteNamespaceVectors"},"deleteNamespaceVectorsGET":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"deleteNamespaceVectorsGET"},"streamedEmbedAndUpsert":{"availableMemoryMb":1024,"timeoutSeconds":300,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"streamedEmbedAndUpsert"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] shutdown requested via /__/quitquitquit
+
+[info] ✔  functions: Loaded functions definitions from source: youtubeTranscript, deleteNamespaceVectors, deleteNamespaceVectorsGET, streamedEmbedAndUpsert. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: youtubeTranscript, deleteNamespaceVectors, deleteNamespaceVectorsGET, streamedEmbedAndUpsert."}}
+[debug] [2023-09-06T03:48:02.403Z] [worker-pool] Shutting down IDLE worker (us-central1-streamedEmbedAndUpsert) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Shutting down IDLE worker (us-central1-streamedEmbedAndUpsert)"}}
+[debug] [2023-09-06T03:48:02.403Z] [worker-us-central1-streamedEmbedAndUpsert-32a6f5c1-01b1-4ff3-8cfe-b04921573c5c]: FINISHING {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-streamedEmbedAndUpsert"},"extension":{},"message":"[worker-us-central1-streamedEmbedAndUpsert-32a6f5c1-01b1-4ff3-8cfe-b04921573c5c]: FINISHING"}}
+[debug] [2023-09-06T03:48:02.415Z] [worker-us-central1-streamedEmbedAndUpsert-32a6f5c1-01b1-4ff3-8cfe-b04921573c5c]: exited {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-streamedEmbedAndUpsert"},"extension":{},"message":"[worker-us-central1-streamedEmbedAndUpsert-32a6f5c1-01b1-4ff3-8cfe-b04921573c5c]: exited"}}
+[debug] [2023-09-06T03:48:02.415Z] [worker-us-central1-streamedEmbedAndUpsert-32a6f5c1-01b1-4ff3-8cfe-b04921573c5c]: FINISHED {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-streamedEmbedAndUpsert"},"extension":{},"message":"[worker-us-central1-streamedEmbedAndUpsert-32a6f5c1-01b1-4ff3-8cfe-b04921573c5c]: FINISHED"}}
+[debug] [2023-09-06T03:48:15.680Z] File /Users/danielmartinez/Documents/GitHub/HyperSearch-Extension-Frontend/functions/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/danielmartinez/Documents/GitHub/HyperSearch-Extension-Frontend/functions/index.js changed, reloading triggers"}}
+[debug] [2023-09-06T03:48:16.681Z] Validating nodejs source
+[debug] [2023-09-06T03:48:17.215Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "@pinecone-database/pinecone": "^0.1.6",
+    "cors": "^2.8.5",
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.3.1",
+    "openai": "^3.3.0",
+    "uuid": "^9.0.0",
+    "uuidv4": "^6.2.13",
+    "youtube-transcript": "^1.0.6"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2023-09-06T03:48:17.215Z] Building nodejs source
+[debug] [2023-09-06T03:48:17.215Z] Failed to find version of module node: reached end of search path /Users/danielmartinez/Documents/GitHub/HyperSearch-Extension-Frontend/functions/node_modules
+[info] ✔  functions: Using node@18 from host. 
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2023-09-06T03:48:17.217Z] Could not find functions.yaml. Must use http discovery
+[debug] [2023-09-06T03:48:17.218Z] Found firebase-functions binary at '/Users/danielmartinez/Documents/GitHub/HyperSearch-Extension-Frontend/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8559
+
+[debug] [2023-09-06T03:48:17.582Z] Got response from /__/functions.yaml {"endpoints":{"youtubeTranscript":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"youtubeTranscript"},"deleteNamespaceVectors":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"deleteNamespaceVectors"},"deleteNamespaceVectorsGET":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"deleteNamespaceVectorsGET"},"streamedEmbedAndUpsert":{"availableMemoryMb":1024,"timeoutSeconds":300,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"streamedEmbedAndUpsert"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] shutdown requested via /__/quitquitquit
+
+[info] ✔  functions: Loaded functions definitions from source: youtubeTranscript, deleteNamespaceVectors, deleteNamespaceVectorsGET, streamedEmbedAndUpsert. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: youtubeTranscript, deleteNamespaceVectors, deleteNamespaceVectorsGET, streamedEmbedAndUpsert."}}
