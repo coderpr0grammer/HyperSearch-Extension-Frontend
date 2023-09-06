@@ -1,6 +1,6 @@
 .responseComponent:hover {
     /* box-shadow: rgba(245, 163, 83, .8) 0px 2px 20px 0px; */
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 
 .responseComponent.show {
@@ -10,8 +10,8 @@
 
 .responseComponent {
     opacity: 0;
-    transition: opacity 0.3s ease-in-out, box-shadow 0.2s ease-out;
-    box-shadow: rgba(89, 138, 238, 0.5) -2px 2px 0px 0px;
+    transition: opacity 0.3s ease-in-out;
+    border: 0 0 2px solid rgba(89, 138, 238, 0.5) 2px solid rgba(89, 138, 238, 0.5);
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;

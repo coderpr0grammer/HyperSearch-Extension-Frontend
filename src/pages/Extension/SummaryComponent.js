@@ -20,7 +20,7 @@ const SummaryComponent = (props) => {
         padding: 15,
         ...props.style,
       }}
-      className={`responseComponent ${props.className}`}
+      className={`summaryComponent ${props.className}`}
     >
       <h3 className="summarized-response-title">Summarized Response</h3>
       <div style={{ display: "inline" }}>
