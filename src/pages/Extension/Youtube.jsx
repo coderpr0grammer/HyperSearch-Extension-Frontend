@@ -60,6 +60,9 @@ const Youtube = () => {
   const [upsertProgress, setUpsertProgress] = useState(0);
   const [summarizedResponse, setSummarizedResponse] = useState("");
   const extensionContainerRef = useRef(null);
+  const resultsContainerRef = useRef(null)
+  const moreResultsRef = useRef(null)
+
   const errorContainer = useRef(null);
   const divRef = useRef(null);
 
@@ -88,6 +91,31 @@ const Youtube = () => {
       errorContainer.current.style.opacity = 1;
     }, 0);
   }, [error]);
+
+  useEffect(() => {
+    const resultsContainer = resultsContainerRef.current;
+
+    const handleScroll = (event) => {
+      const { scrollTop, scrollHeight, clientHeight } = event.target;
+
+      const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+
+      if (scrollPercentage > 1) {
+        console.log('Scroll position is greater than 50%');
+        moreResultsRef.current.style.opacity = 0
+      } else {
+        moreResultsRef.current.style.opacity = 1
+      }
+    };
+
+    // Add scroll event listener to the results container
+    resultsContainer.addEventListener('scroll', handleScroll);
+
+    // Remove the event listener when the component unmounts
+    return () => {
+      resultsContainer.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const auth = getAuth();
 
@@ -266,7 +294,7 @@ const Youtube = () => {
             </p>
           </button>
 
-          <div className="results-container">
+          <div className="results-container" ref={resultsContainerRef}>
             <SummaryComponent
               style={{
                 transitionDelay: `${1 * 0.06}s`,
@@ -291,8 +319,8 @@ const Youtube = () => {
               />
             ))}
             <div
-              classname="more-results
-"
+              classname="more-results"
+              ref={moreResultsRef}
             ></div>
           </div>
         </>
