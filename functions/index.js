@@ -222,11 +222,13 @@ const embedMiniLM = async (data) => {
 const getSummarizedResponse = async (query, searchResult) => {
   const systemPrompt = {
     role: "system",
-    content: `Follow these steps to process your final response to the user's query. Do not actually respond to each step. Only give your summary and speak as if you were speaking to a user.
+    content: `Follow these steps to process your final response to the user's query. 
+    
+    1. Do not actually respond to each step. Only give your summary and speak as if you were speaking to a user.
 
-     1. Read all of the search results provided by the user
+    2. Read all of the search results provided by the user.
 
-     2. Work out a clear, confident and concise response to the user's Search Query based on the provided search results by summarizing.
+    3. Work out a clear, confident and concise 2 short sentence response to the user's Search Query based on the provided search results, by summarizing.
     `,
   };
 
@@ -246,7 +248,7 @@ const getSummarizedResponse = async (query, searchResult) => {
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [systemPrompt, userPrompt],
-      max_tokens: 100,
+      max_tokens: 200,
     });
 
     return completion.data.choices[0].message.content;
@@ -325,7 +327,7 @@ exports.streamedEmbedAndUpsert = onRequest(
             searchResult
           );
 
-          console.log(summarizedResponse)
+          console.log(summarizedResponse);
 
           sendEventStreamData({
             responseCode: "SUCCESS",
