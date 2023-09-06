@@ -1,0 +1,54 @@
+[debug] [2023-09-06T01:23:43.330Z] ----------------------------------------------------------------------
+[debug] [2023-09-06T01:23:43.331Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy --only functions
+[debug] [2023-09-06T01:23:43.332Z] CLI Version:   12.5.2
+[debug] [2023-09-06T01:23:43.332Z] Platform:      darwin
+[debug] [2023-09-06T01:23:43.332Z] Node Version:  v18.16.0
+[debug] [2023-09-06T01:23:43.333Z] Time:          Tue Sep 05 2023 21:23:43 GMT-0400 (Eastern Daylight Time)
+[debug] [2023-09-06T01:23:43.333Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-09-06T01:23:43.398Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-09-06T01:23:43.399Z] > authorizing via signed-in user (danielgorg9@gmail.com)
+[debug] [2023-09-06T01:23:43.399Z] [iam] checking project skm-extension-official for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2023-09-06T01:23:43.400Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/skm-extension-official:testIamPermissions [none]
+[debug] [2023-09-06T01:23:43.401Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/skm-extension-official:testIamPermissions x-goog-quota-user=projects/skm-extension-official
+[debug] [2023-09-06T01:23:43.401Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/skm-extension-official:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2023-09-06T01:23:43.825Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/skm-extension-official:testIamPermissions 200
+[debug] [2023-09-06T01:23:43.825Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/skm-extension-official:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2023-09-06T01:23:43.826Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/skm-extension-official/serviceAccounts/skm-extension-official@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-09-06T01:23:43.826Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/skm-extension-official/serviceAccounts/skm-extension-official@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-09-06T01:23:44.175Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/skm-extension-official/serviceAccounts/skm-extension-official@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-09-06T01:23:44.175Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/skm-extension-official/serviceAccounts/skm-extension-official@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[info] 
+[info] === Deploying to 'skm-extension-official'...
+[info] 
+[info] i  deploying functions 
+[debug] [2023-09-06T01:23:44.179Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/skm-extension-official [none]
+[debug] [2023-09-06T01:23:44.572Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/skm-extension-official 200
+[debug] [2023-09-06T01:23:44.573Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/skm-extension-official {"projectId":"skm-extension-official","projectNumber":"173016892459","displayName":"hypersearch-extension","name":"projects/skm-extension-official","resources":{"hostingSite":"skm-extension-official"},"state":"ACTIVE","etag":"1_5ba3c3fa-6560-4544-b002-2668a451ef56"}
+[info] i  functions: preparing codebase default for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2023-09-06T01:23:44.575Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/cloudfunctions.googleapis.com [none]
+[debug] [2023-09-06T01:23:44.575Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/skm-extension-official
+[debug] [2023-09-06T01:23:44.577Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/runtimeconfig.googleapis.com [none]
+[debug] [2023-09-06T01:23:44.577Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/skm-extension-official
+[debug] [2023-09-06T01:23:44.579Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/cloudbuild.googleapis.com [none]
+[debug] [2023-09-06T01:23:44.579Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/cloudbuild.googleapis.com x-goog-quota-user=projects/skm-extension-official
+[debug] [2023-09-06T01:23:44.580Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/artifactregistry.googleapis.com [none]
+[debug] [2023-09-06T01:23:44.581Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/artifactregistry.googleapis.com x-goog-quota-user=projects/skm-extension-official
+[debug] [2023-09-06T01:23:45.078Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/runtimeconfig.googleapis.com 200
+[debug] [2023-09-06T01:23:45.078Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2023-09-06T01:23:45.112Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/cloudbuild.googleapis.com 200
+[debug] [2023-09-06T01:23:45.113Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/cloudbuild.googleapis.com [omitted]
+[info] ✔  functions: required API cloudbuild.googleapis.com is enabled 
+[debug] [2023-09-06T01:23:45.130Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/cloudfunctions.googleapis.com 200
+[debug] [2023-09-06T01:23:45.130Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/cloudfunctions.googleapis.com [omitted]
+[info] ✔  functions: required API cloudfunctions.googleapis.com is enabled 
+[debug] [2023-09-06T01:23:45.157Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/artifactregistry.googleapis.com 200
+[debug] [2023-09-06T01:23:45.158Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/skm-extension-official/services/artifactregistry.googleapis.com [omitted]
+[info] ✔  artifactregistry: required API artifactregistry.googleapis.com is enabled 
+[debug] [2023-09-06T01:23:45.158Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/skm-extension-official/adminSdkConfig [none]
+[debug] [2023-09-06T01:23:45.575Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/skm-extension-official/adminSdkConfig 200
+[debug] [2023-09-06T01:23:45.575Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/skm-extension-official/adminSdkConfig {"projectId":"skm-extension-official","storageBucket":"skm-extension-official.appspot.com"}
+[debug] [2023-09-06T01:23:45.576Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/skm-extension-official/configs [none]
