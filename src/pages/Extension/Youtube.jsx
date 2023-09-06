@@ -55,6 +55,7 @@ const Youtube = () => {
   const [idToken, setIdToken] = useState(null);
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [theme, setTheme] = useState('')
   // const [dark, setDark] = useState(false);
   const [displayNone, setDisplayNone] = useState(true);
   const [globalQuery, setGlobalQuery] = useState("");
@@ -113,6 +114,16 @@ const Youtube = () => {
       };
     }
   }, [showResults]);
+
+  useEffect(()=> {
+
+    const urlParams = new URLSearchParams(
+      new URL(window.location.href).search
+    );
+
+    setTheme(urlParams.get("theme"))
+
+  }, window.location.href)
 
   const auth = getAuth();
 
@@ -330,9 +341,7 @@ const Youtube = () => {
               />
             ))}
             <div
-              className={`more-results ${new URLSearchParams(
-                new URL(window.location.href).search
-              ).get("theme")}`}
+              className={`more-results ${theme}`}
               style={{ opacity: moreResultsOpacity }}
             ></div>
           </div>
