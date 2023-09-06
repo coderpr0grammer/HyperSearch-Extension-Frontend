@@ -315,7 +315,7 @@ const Youtube = () => {
             </p>
           </button>
 
-          <div className="results-container" style={{display: loading}} ref={resultsContainerRef}>
+          <div className="results-container" style={{display: loading ? 'none' : 'block'}} ref={resultsContainerRef}>
             <SummaryComponent
               style={{
                 transitionDelay: `${1 * 0.06}s`,
