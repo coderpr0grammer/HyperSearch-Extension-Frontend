@@ -59,7 +59,7 @@ const Youtube = () => {
   const [globalQuery, setGlobalQuery] = useState("");
   const [upsertProgress, setUpsertProgress] = useState(0);
   const [summarizedResponse, setSummarizedResponse] = useState("");
-  const [moreResultsOpacity, setMoreResultsOpacity] = useState(1)
+  const [moreResultsOpacity, setMoreResultsOpacity] = useState(1);
   const extensionContainerRef = useRef(null);
   const resultsContainerRef = useRef(null);
   const errorContainer = useRef(null);
@@ -97,18 +97,18 @@ const Youtube = () => {
     if (showResults && resultsContainer) {
       const handleScroll = () => {
         if (resultsContainer.scrollTop !== 0) {
-          setMoreResultsOpacity(0)
+          setMoreResultsOpacity(0);
         } else {
-          setMoreResultsOpacity(1)
+          setMoreResultsOpacity(1);
         }
       };
 
       // Add scroll event listener to the results container
-      resultsContainer.addEventListener('scroll', handleScroll);
+      resultsContainer.addEventListener("scroll", handleScroll);
 
       // Remove the event listener when the component unmounts or when results are no longer visible
       return () => {
-        resultsContainer.removeEventListener('scroll', handleScroll);
+        resultsContainer.removeEventListener("scroll", handleScroll);
       };
     }
   }, [showResults]);
@@ -302,7 +302,7 @@ const Youtube = () => {
 
             {results.map((item, index) => (
               <ResultComponent
-              index={index}
+                index={index}
                 content={item.metadata.originalText}
                 timeStamp={Math.floor(item.metadata.timeStamp / 1000)}
                 query={globalQuery}
@@ -315,10 +315,12 @@ const Youtube = () => {
                 className={`${showResults ? "show" : ""}`}
               />
             ))}
-            {/* <div
-              className="more-results"
-              style={{opacity: moreResultsOpacity}}
-            ></div> */}
+            <div
+              className={`more-results ${new URLSearchParams(
+                new URL(window.location.href).search
+              ).get("theme")}`}
+              style={{ opacity: moreResultsOpacity }}
+            ></div>
           </div>
         </>
       )}
