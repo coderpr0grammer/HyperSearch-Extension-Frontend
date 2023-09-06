@@ -52,6 +52,7 @@ const Youtube = () => {
   const [results, setResults] = useState([]);
   const [error, setError] = useState("");
   const [extensionActive, setExtensionActive] = useState(false);
+  const [idToken, setIdToken] = useState(null);
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(false);
   // const [dark, setDark] = useState(false);
@@ -115,6 +116,15 @@ const Youtube = () => {
 
   const auth = getAuth();
 
+
+  useEffect(() => {
+    (async () => {
+      const idToken = await auth.currentUser.getIdToken();
+      console.log(idToken)
+      setIdToken(idToken);
+    })();
+  }, [auth.currentUser]);
+
   return (
     <div
       id="main-popup-hypersearch"
@@ -156,7 +166,7 @@ const Youtube = () => {
           const url = "https://streamedembedandupsert-i7nkqebqsa-uc.a.run.app/";
 
           const urlTest =
-            "http://127.0.0.1:5001/skm-extension-official/us-central1/streamedEmbedAndUpsert";
+            "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch";
 
           let data = {
             indexName: "video-embeddings",
@@ -165,16 +175,20 @@ const Youtube = () => {
             subscribedToPro: subscribedToPro,
           };
 
-          fetch(url, {
-            method: "POST",
-            cache: "no-cache",
-            keepalive: true,
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "text/event-stream",
-            },
-            body: JSON.stringify(data),
-          })
+          fetch(
+            url,
+            {
+              method: "POST",
+              cache: "no-cache",
+              keepalive: true,
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "text/event-stream",
+                Authorization: `Bearer ${idToken}`,
+              },
+              body: JSON.stringify(data),
+            }
+          )
             .then(async (res) => {
               const reader = res.body.getReader();
 

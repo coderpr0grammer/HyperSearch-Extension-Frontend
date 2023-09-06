@@ -109,18 +109,18 @@
 
 .more-results {
   position: absolute;
-  height: 40px;
+  height: 100px;
   bottom: 0;
   left: 0;
   width: 100%;
   transition: opacity 0.2s;
 }
 
-.more-results .light {
-  background: linear-gradient(0deg, #F0F0F0, transparent);
+.more-results.light {
+  background: linear-gradient(0deg, white, transparent);
 }
 
-.more-results .dark {
+.more-results.dark {
   background: linear-gradient(0deg, #0F0F0F, transparent);
 }
 

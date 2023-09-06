@@ -20,7 +20,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 const cors = require("cors")({
-  origin: "https://hypersearch-extension-frontend.vercel.app",
+  origin: true,
 });
 
 const allowedOrigins = [
@@ -268,10 +268,7 @@ exports.streamedEmbedAndUpsert = onRequest(
       res.setHeader("Content-Type", "text/event-stream");
       res.setHeader("Cache-Control", "no-cache");
       res.setHeader("Connection", "keep-alive");
-      res.setHeader(
-        "Access-Control-Allow-Origin",
-        "https://hypersearch-extension-frontend.vercel.app"
-      );
+      res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Vary", "Origin");
       res.flushHeaders();
 
@@ -289,17 +286,17 @@ exports.streamedEmbedAndUpsert = onRequest(
         return;
       }
 
-      if (!allowedOrigins.includes(req.headers.origin)) {
-        console.log("origin: ", req.headers.origin);
-        sendEventStreamData({
-          responseCode: "ERROR",
-          data: { errorMessage: "Unauthorized request" },
-        });
+      // if (!allowedOrigins.includes(req.headers.origin)) {
+      //   console.log("origin: ", req.headers.origin);
+      //   sendEventStreamData({
+      //     responseCode: "ERROR",
+      //     data: { errorMessage: "Unauthorized request" },
+      //   });
 
-        // res.status(403).json({ error: "Unauthorized request" });
-        res.end();
-        return;
-      }
+      //   // res.status(403).json({ error: "Unauthorized request" });
+      //   res.end();
+      //   return;
+      // }
 
       let { indexName, videoID, query, subscribedToPro } = req.body;
 
@@ -444,12 +441,12 @@ exports.streamedEmbedAndUpsert = onRequest(
  * limitations under the License.
  */
 
-const functions = require('firebase-functions/v1');
-const admin = require('firebase-admin');
+const functions = require("firebase-functions/v1");
+const admin = require("firebase-admin");
 admin.initializeApp();
-const express = require('express');
+const express = require("express");
 // const cookieParser = require('cookie-parser')();
-const cors2 = require('cors')({origin: true});
+const cors2 = require("cors")({ origin: true });
 const app = express();
 
 // Express middleware that validates Firebase ID Tokens passed in the Authorization HTTP header.
@@ -457,39 +454,58 @@ const app = express();
 // `Authorization: Bearer <Firebase ID Token>`.
 // when decoded successfully, the ID Token content will be added as `req.user`.
 const validateFirebaseIdToken = async (req, res, next) => {
-  functions.logger.log('Check if request is authorized with Firebase ID token');
+  functions.logger.log("Check if request is authorized with Firebase ID token");
 
-  if ((!req.headers.authorization || !req.headers.authorization.startsWith('Bearer '))) {
+  if (
+    !req.headers.authorization ||
+    !req.headers.authorization.startsWith("Bearer ")
+  ) {
     functions.logger.error(
-      'No Firebase ID token was passed as a Bearer token in the Authorization header.',
-      'Make sure you authorize your request by providing the following HTTP header:',
-      'Authorization: Bearer <Firebase ID Token>',
-      'or by passing a "__session" cookie.'
+      "No Firebase ID token was passed as a Bearer token in the Authorization header.",
+      "Make sure you authorize your request by providing the following HTTP header:",
+      "Authorization: Bearer <Firebase ID Token>"
     );
-    res.status(403).send('Unauthorized');
+    res.status(403).json({
+      responseCode: "ERROR",
+      data: {
+        errorMessage: `No Firebase ID token was passed as a Bearer token in the Authorization header.
+    Make sure you authorize your request by providing the following HTTP header:
+    Authorization: Bearer <Firebase ID Token>`,
+      },
+    });
     return;
   }
 
   let idToken;
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer ")
+  ) {
     functions.logger.log('Found "Authorization" header');
     // Read the ID Token from the Authorization header.
-    idToken = req.headers.authorization.split('Bearer ')[1];
+    idToken = req.headers.authorization.split("Bearer ")[1];
   } else {
     // No authorization header
-    res.status(403).send('Unauthorized');
+    res
+      .status(403)
+      .json({
+        responseCode: "ERROR",
+        data: { errorMessage: "Unauthorized: No authorization header found." },
+      });
     return;
   }
 
   try {
     const decodedIdToken = await admin.auth().verifyIdToken(idToken);
-    functions.logger.log('ID Token correctly decoded', decodedIdToken);
+    functions.logger.log("ID Token correctly decoded", decodedIdToken);
     req.user = decodedIdToken;
     next();
     return;
   } catch (error) {
-    functions.logger.error('Error while verifying Firebase ID token:', error);
-    res.status(403).send('Unauthorized');
+    functions.logger.error("Error while verifying Firebase ID token:", error);
+    res
+      .status(403)
+      .json({responseCode: "ERROR", data: { errorMessage: "Unauthorized. Error while verifying Firebase ID token: " + error}});
     return;
   }
 };
@@ -498,12 +514,171 @@ app.use(cors2);
 // app.use(cookieParser);
 app.use(validateFirebaseIdToken);
 
-app.get('/hello', (req, res) => {
+app.post("/", async (req, res) => {
   // @ts-ignore
-  res.send(`Hello ${req.user.name}`);
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.flushHeaders();
+
+  const sendEventStreamData = (data) => {
+    res.write(`${JSON.stringify(data)}\n\n`);
+  };
+
+  if (req.method !== "POST") {
+    sendEventStreamData({
+      responseCode: "ERROR",
+      response: "Method not alllowed",
+    });
+    // res.status(405).send("Method Not Allowed");
+    res.end();
+    return;
+  }
+
+  // if (!allowedOrigins.includes(req.headers.origin)) {
+  //   console.log("origin: ", req.headers.origin);
+  //   sendEventStreamData({
+  //     responseCode: "ERROR",
+  //     data: { errorMessage: "Unauthorized request" },
+  //   });
+
+  //   // res.status(403).json({ error: "Unauthorized request" });
+  //   res.end();
+  //   return;
+  // }
+
+  let { indexName, videoID, query, subscribedToPro } = req.body;
+
+  try {
+    let index = await getIndexRef(indexName);
+
+    const doesNamespaceExist = await checkIfNamespaceExists(index, videoID);
+
+    console.log("does namespace exist", doesNamespaceExist);
+
+    if (doesNamespaceExist) {
+      //only query
+      console.log("namespace exists");
+      //   const deleteResponse = await deleteNamespaceVectors(videoID);
+      //   console.log(deleteResponse);
+
+      const { embedding } = await getEmbedding(query);
+
+      // console.log("queryembedding", embedding);
+
+      const searchResult = await search(index, videoID, embedding);
+
+      const summarizedResponse = await getSummarizedResponse(
+        query,
+        searchResult
+      );
+
+      console.log(summarizedResponse);
+
+      sendEventStreamData({
+        responseCode: "SUCCESS",
+        data: {
+          searchResult,
+          summarizedResponse,
+        },
+      });
+
+      res.end();
+    } else {
+      //upsert and query
+
+      const youtubeTranscriptApiURl = `https://yt-transcript-api.vercel.app/api/?videoID=${videoID}`;
+
+      let transcript = await fetch(youtubeTranscriptApiURl)
+        .then((response) => response.json())
+        .then((res) => {
+          if (res.responseCode == "ERROR") {
+            throw new Error(res.response);
+          } else {
+            return res.response;
+          }
+        });
+
+      console.log(transcript);
+      transcript = reformChunks(transcript);
+      let embeddingRefs = [];
+
+      embedTranscript(
+        transcript,
+        async (segment, embedding, embeddingID, percentage) => {
+          const { text, offset } = segment;
+
+          const upsertRequest = {
+            vectors: [
+              {
+                id: embeddingID,
+                values: embedding,
+                metadata: {
+                  videoID: videoID,
+                  originalText: text,
+                  timeStamp: offset,
+                },
+              },
+            ],
+            namespace: videoID,
+          };
+
+          embeddingRefs.push(embeddingID);
+
+          try {
+            await index.upsert({ upsertRequest });
+            console.log("done upsert: " + percentage + "%");
+  
+            sendEventStreamData({
+              responseCode: "SUCCESS",
+              data: { percentage },
+            });
+          } catch (err) {
+            console.error(err)
+            await deleteNamespaceVectors(videoID)
+
+            sendEventStreamData({
+              responseCode: "ERROR",
+              data: { errorMessage: err },
+            });
+          }
+         
+        }
+      ).then(async () => {
+        const { embedding } = await getEmbedding(query);
+
+        const searchResult = await search(index, videoID, embedding);
+
+        const summarizedResponse = await getSummarizedResponse(
+          query,
+          searchResult
+        );
+
+        sendEventStreamData({
+          responseCode: "SUCCESS",
+          data: {
+            searchResult,
+            summarizedResponse,
+          },
+        });
+
+        console.log("ending res");
+        res.end();
+      });
+    }
+
+  } catch (error) {
+    console.error("Error:", error.message);
+    sendEventStreamData({
+      responseCode: "ERROR",
+      data: { errorMessage: error },
+    });
+    res.end();
+  }
 });
 
 // This HTTPS endpoint can only be accessed by your Firebase Users.
 // Requests need to be authorized by providing an `Authorization` HTTP header
 // with value `Bearer <Firebase ID Token>`.
-exports.app = onRequest(app);
+exports.hypersearch = onRequest(app);
