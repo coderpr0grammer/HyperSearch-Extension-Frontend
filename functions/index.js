@@ -20,7 +20,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 const cors = require("cors")({
-  origin: "https://hypersearch-extension-frontend.vercel.app",
+  origin: true,
 });
 
 const allowedOrigins = [
@@ -270,7 +270,7 @@ exports.streamedEmbedAndUpsert = onRequest(
       res.setHeader("Connection", "keep-alive");
       res.setHeader(
         "Access-Control-Allow-Origin",
-        "https://hypersearch-extension-frontend.vercel.app"
+        "*"
       );
       res.setHeader("Vary", "Origin");
       res.flushHeaders();

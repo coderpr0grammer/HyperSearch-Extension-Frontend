@@ -97,6 +97,8 @@ const ResultComponent = (props) => {
       className={`responseComponent ${props.className}`}
       onClick={handleButtonClick}
     >
+            
+      {props.index === 0 && <h3 className="clips-title">Relevant clips</h3>}
       <div style={{ display: 'inline' }}>
         <div className={`playButton ${dark ? 'dark' : 'light'}`}>
           <FontAwesomeIcon

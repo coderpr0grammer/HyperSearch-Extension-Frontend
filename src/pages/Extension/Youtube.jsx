@@ -165,7 +165,7 @@ const Youtube = () => {
             subscribedToPro: subscribedToPro,
           };
 
-          fetch(url, {
+          fetch(urlTest, {
             method: "POST",
             cache: "no-cache",
             keepalive: true,
@@ -302,6 +302,7 @@ const Youtube = () => {
 
             {results.map((item, index) => (
               <ResultComponent
+              index={index}
                 content={item.metadata.originalText}
                 timeStamp={Math.floor(item.metadata.timeStamp / 1000)}
                 query={globalQuery}

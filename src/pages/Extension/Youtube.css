@@ -105,6 +105,8 @@
   background-color: transparent; 
 }*/
 
+
+
 .more-results {
   position: absolute;
   background: linear-gradient(0deg, #F0F0F0, transparent);
@@ -114,6 +116,7 @@
   width: 100%;
   transition: opacity 0.2s;
 }
+
 
 /* 
 .results::-webkit-scrollbar {
