@@ -246,7 +246,7 @@ const getSummarizedResponse = async (query, searchResult) => {
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [systemPrompt, userPrompt],
-      max_tokens: 500,
+      max_tokens: 100,
     });
 
     return completion.data.choices[0].message.content;

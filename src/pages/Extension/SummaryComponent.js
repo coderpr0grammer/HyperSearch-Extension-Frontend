@@ -21,7 +21,7 @@ const SummaryComponent = (props) => {
       }}
       className={`responseComponent ${props.className}`}
     >
-        <h4 style={{fontFamily:"CohereHeadline"}}>Summarized Response</h4>
+        <h4 className="summarized-response-title">Summarized Response</h4>
       <div style={{ display: 'inline' }}>
         <p style={{ color: '#598AEE', display: 'inline', fontFamily: 'CohereText !important'}}>{props.content}</p>
       </div>
