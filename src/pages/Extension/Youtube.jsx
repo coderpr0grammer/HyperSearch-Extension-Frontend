@@ -314,10 +314,10 @@ const Youtube = () => {
                 className={`${showResults ? "show" : ""}`}
               />
             ))}
-            <div
+            {/* <div
               className="more-results"
               style={{opacity: moreResultsOpacity}}
-            ></div>
+            ></div> */}
           </div>
         </>
       )}
