@@ -183,7 +183,7 @@ const Youtube = () => {
                   } else if (data.searchResult) {
                     console.log(data);
 
-                    setSummaryResponse(data.summarizedResponse)
+                    setSummarizedResponse(data.summarizedResponse)
                     setResults(data.searchResult.matches);
 
                     setDisplayNone(false);
