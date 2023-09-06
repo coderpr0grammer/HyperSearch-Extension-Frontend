@@ -97,7 +97,9 @@ const Youtube = () => {
     if (showResults && resultsContainer) {
       const handleScroll = () => {
         if (resultsContainer.scrollTop !== 0) {
-          console.log('Scroll position is not 0');
+          setMoreResultsOpacity(0)
+        } else {
+          setMoreResultsOpacity(1)
         }
       };
 
