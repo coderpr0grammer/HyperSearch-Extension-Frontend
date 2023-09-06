@@ -272,7 +272,7 @@ const Youtube = () => {
         <ProgressBar color="#e575e8" progress={upsertProgress} />
       )}
 
-      {!error && results.length > 0 && (
+      {!error && results && results.length > 0 && (
         <>
           <button
             className={`drawerButton ${dark ? "dark" : "light"}`}
