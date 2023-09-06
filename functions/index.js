@@ -222,7 +222,7 @@ const embedMiniLM = async (data) => {
 const getSummarizedResponse = async (query, searchResult) => {
   const systemPrompt = {
     role: "system",
-    content: `Follow these steps to process your final response to the user's query. Do not actually respond to each step. Only give your summary, don't say that it is based on the search results
+    content: `Follow these steps to process your final response to the user's query. Do not actually respond to each step. Only give your summary and speak as if you were speaking to a user.
 
      1. Read all of the search results provided by the user
 

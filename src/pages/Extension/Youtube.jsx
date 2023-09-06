@@ -142,7 +142,7 @@ const Youtube = () => {
             subscribedToPro: subscribedToPro
           };
 
-          fetch(urlTest, {
+          fetch(url, {
             method: "POST",
             cache: "no-cache",
             keepalive: true,
