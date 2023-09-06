@@ -269,7 +269,11 @@ const Youtube = () => {
             </p>
           </button>
           <SummaryComponent
-
+          style={{
+            transitionDelay: `${(1) * 0.06}s`,
+                display: displayNone ? "none" : "block",
+          }}
+          className={`${showResults ? "show" : ""}`}
           content={summarizedResponse}
           
           />
