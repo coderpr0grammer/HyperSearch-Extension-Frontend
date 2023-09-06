@@ -59,10 +59,9 @@ const Youtube = () => {
   const [globalQuery, setGlobalQuery] = useState("");
   const [upsertProgress, setUpsertProgress] = useState(0);
   const [summarizedResponse, setSummarizedResponse] = useState("");
-  const [resultsContainerRef] = useRef(null)
   const [moreResultsOpacity, setMoreResultsOpacity] = useState(1)
   const extensionContainerRef = useRef(null);
-
+  const resultsContainerRef = useRef(null);
   const errorContainer = useRef(null);
   const divRef = useRef(null);
 
@@ -95,25 +94,27 @@ const Youtube = () => {
   useEffect(() => {
     const resultsContainer = resultsContainerRef.current;
 
+    if (!resultsContainer) return;
+
     const handleScroll = (event) => {
       const { scrollTop, scrollHeight, clientHeight } = event.target;
 
-      const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+      const scrollPercentage =
+        (scrollTop / (scrollHeight - clientHeight)) * 100;
 
       if (scrollPercentage > 1) {
-        console.log('Scroll position is greater than 50%');
-        setMoreResultsOpacity(0)
-      } else {
         setMoreResultsOpacity(1)
+      } else {
+        setMoreResultsOpacity(0)
       }
     };
 
     // Add scroll event listener to the results container
-    resultsContainer.addEventListener('scroll', handleScroll);
+    resultsContainer.addEventListener("scroll", handleScroll);
 
     // Remove the event listener when the component unmounts
     return () => {
-      resultsContainer.removeEventListener('scroll', handleScroll);
+      resultsContainer.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
