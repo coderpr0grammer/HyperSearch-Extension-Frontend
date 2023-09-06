@@ -219,6 +219,42 @@ const embedMiniLM = async (data) => {
   return result;
 };
 
+const getSummarizedResponse = async (query, searchResult) => {
+  const systemPrompt = {
+    role: "system",
+    content: `Follow these steps to process your final response to the user's query. Do not actually respond to each step. Only give your summary, don't say that it is based on the search results
+
+     1. Read all of the search results provided by the user
+
+     2. Work out a clear, confident and concise response to the user's Search Query based on the provided search results by summarizing.
+    `,
+  };
+
+  const userPrompt = {
+    role: "user",
+    content: `
+
+        Search Query: ${query}
+
+        ${searchResult.matches.map((item, index) => {
+          return `Search Result ${index}: ${item.metadata.originalText}`;
+        })}
+      `,
+  };
+
+  try {
+    const completion = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [systemPrompt, userPrompt],
+      max_tokens: 500,
+    });
+
+    return completion.data.choices[0].message.content;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 exports.streamedEmbedAndUpsert = onRequest(
   {
     timeoutSeconds: 300,
@@ -263,7 +299,7 @@ exports.streamedEmbedAndUpsert = onRequest(
         return;
       }
 
-      let { indexName, videoID, query } = req.body;
+      let { indexName, videoID, query, subscribedToPro } = req.body;
 
       try {
         let index = await getIndexRef(indexName);
@@ -278,18 +314,26 @@ exports.streamedEmbedAndUpsert = onRequest(
           //   const deleteResponse = await deleteNamespaceVectors(videoID);
           //   console.log(deleteResponse);
 
-            const { embedding } = await getEmbedding(query);
+          const { embedding } = await getEmbedding(query);
 
-              // console.log("queryembedding", embedding);
+          // console.log("queryembedding", embedding);
 
-            const searchResult = await search(index, videoID, embedding);
+          const searchResult = await search(index, videoID, embedding);
 
-            console.log(searchResult)
+          const summarizedResponse = await getSummarizedResponse(
+            query,
+            searchResult
+          );
 
-            sendEventStreamData({
-              responseCode: "SUCCESS",
-              data: { searchResult },
-            })
+          console.log(summarizedResponse)
+
+          sendEventStreamData({
+            responseCode: "SUCCESS",
+            data: {
+              searchResult,
+              summarizedResponse,
+            },
+          });
 
           res.end();
         } else {
@@ -353,9 +397,17 @@ exports.streamedEmbedAndUpsert = onRequest(
 
             const searchResult = await search(index, videoID, embedding);
 
+            const summarizedResponse = await getSummarizedResponse(
+              query,
+              searchResult
+            );
+
             sendEventStreamData({
               responseCode: "SUCCESS",
-              data: { searchResult },
+              data: {
+                searchResult,
+                summarizedResponse,
+              },
             });
 
             console.log("ending res");

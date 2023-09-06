@@ -137,9 +137,10 @@ const Youtube = () => {
             indexName: "video-embeddings",
             videoID: vid,
             query: query,
+            subscribedToPro: subscribedToPro
           };
 
-          fetch(url, {
+          fetch(urlTest, {
             method: "POST",
             cache: "no-cache",
             keepalive: true,
@@ -178,7 +179,8 @@ const Youtube = () => {
                     console.log("progress: ", data.percentage);
                     setUpsertProgress(data.percentage);
                   } else if (data.searchResult) {
-                    console.log(data.searchResult);
+                    console.log(data);
+
                     setResults(data.searchResult.matches);
 
                     setDisplayNone(false);
