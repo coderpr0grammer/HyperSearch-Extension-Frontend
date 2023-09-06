@@ -46,6 +46,7 @@ import { httpsCallable } from "firebase/functions";
 import { functions } from "../../utils/firebaseConfig";
 import { AuthenticationContext } from "../../infrastructure/authentication/authentication.context";
 import ProgressBar from "./ProgressBar";
+import SummaryComponent from "./SummaryComponent";
 
 const Youtube = () => {
   const [results, setResults] = useState([]);
@@ -57,6 +58,7 @@ const Youtube = () => {
   const [displayNone, setDisplayNone] = useState(true);
   const [globalQuery, setGlobalQuery] = useState("");
   const [upsertProgress, setUpsertProgress] = useState(0);
+  const [summarizedResponse, setSummarizedResponse] = useState('')
   const extensionContainerRef = useRef(null);
   const errorContainer = useRef(null);
   const divRef = useRef(null);
@@ -181,6 +183,7 @@ const Youtube = () => {
                   } else if (data.searchResult) {
                     console.log(data);
 
+                    setSummaryResponse(data.summarizedResponse)
                     setResults(data.searchResult.matches);
 
                     setDisplayNone(false);
@@ -265,6 +268,11 @@ const Youtube = () => {
               &nbsp;{displayNone ? "Show Results" : "Hide results"}&nbsp;
             </p>
           </button>
+          <SummaryComponent
+
+          content={summarizedResponse}
+          
+          />
           {results.map((item, index) => (
             <ResultComponent
               content={item.metadata.originalText}
