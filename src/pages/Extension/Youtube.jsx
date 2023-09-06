@@ -163,6 +163,7 @@ const Youtube = () => {
             console.log("YouTube is in light mode");
           }
 
+          setDisplayNone(true)
           setError("");
           setGlobalQuery(query);
           setLoading(true);
