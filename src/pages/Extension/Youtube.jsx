@@ -174,7 +174,7 @@ const Youtube = () => {
 
           const vid = urlParams.get("vid");
 
-          const url = "https://streamedembedandupsert-i7nkqebqsa-uc.a.run.app/";
+          const url = "https://hypersearch-i7nkqebqsa-uc.a.run.app/";
 
           const urlTest =
             "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch";
