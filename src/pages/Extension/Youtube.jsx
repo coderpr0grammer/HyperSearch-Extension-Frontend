@@ -94,30 +94,21 @@ const Youtube = () => {
   useEffect(() => {
     const resultsContainer = resultsContainerRef.current;
 
-    if (!resultsContainer) return;
+    if (showResults && resultsContainer) {
+      const handleScroll = () => {
+        if (resultsContainer.scrollTop !== 0) {
+          console.log('Scroll position is not 0');
+        }
+      };
 
-    const handleScroll = (event) => {
-      const { scrollTop, scrollHeight, clientHeight } = event.target;
+      // Add scroll event listener to the results container
+      resultsContainer.addEventListener('scroll', handleScroll);
 
-      const scrollPercentage =
-        (scrollTop / (scrollHeight - clientHeight)) * 100;
-
-        console.log(resultsContainer.scrollTop)
-    
-      if (resultsContainer.scrollTop !== 0) {
-        setMoreResultsOpacity(0)
-      } else {
-        setMoreResultsOpacity(1)
-      }
-    };
-
-    // Add scroll event listener to the results container
-    resultsContainer.addEventListener("scroll", handleScroll);
-
-    // Remove the event listener when the component unmounts
-    return () => {
-      resultsContainer.removeEventListener("scroll", handleScroll);
-    };
+      // Remove the event listener when the component unmounts or when results are no longer visible
+      return () => {
+        resultsContainer.removeEventListener('scroll', handleScroll);
+      };
+    }
   }, []);
 
   const auth = getAuth();
