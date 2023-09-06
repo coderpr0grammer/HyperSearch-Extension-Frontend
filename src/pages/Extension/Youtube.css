@@ -94,16 +94,16 @@
   position: relative;
 }
 
-.results-container::after {
+/*.results-container::after {
   content: "";
   position: absolute;
   width: 100%;
-  height: 10px; /* Adjust the shadow height as needed */
+  height: 10px;
   left: 0;
   bottom: 0;
   box-shadow: inset 0 -10px 10px -10px rgba(89, 138, 238, 0.7);
-  background-color: transparent; /* This can be your container's background color */
-}
+  background-color: transparent; 
+}*/
 
 .more-results {
   position: absolute;

@@ -320,7 +320,7 @@ const Youtube = () => {
               />
             ))}
             <div
-              classname="more-results"
+              className="more-results"
               style={{opacity: moreResultsOpacity}}
             ></div>
           </div>
