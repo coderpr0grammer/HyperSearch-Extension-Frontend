@@ -11,7 +11,9 @@
 .summaryComponent {
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
-    border: 0 0 2px solid rgba(89, 138, 238, 0.5) 2px solid rgba(89, 138, 238, 0.5);
+    border: rgba(89, 138, 238, 0.5);
+    border-style: solid;
+    border-width: 0 0 2px 2px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
