@@ -486,12 +486,10 @@ const validateFirebaseIdToken = async (req, res, next) => {
     idToken = req.headers.authorization.split("Bearer ")[1];
   } else {
     // No authorization header
-    res
-      .status(403)
-      .json({
-        responseCode: "ERROR",
-        data: { errorMessage: "Unauthorized: No authorization header found." },
-      });
+    res.status(403).json({
+      responseCode: "ERROR",
+      data: { errorMessage: "Unauthorized: No authorization header found." },
+    });
     return;
   }
 
@@ -505,7 +503,13 @@ const validateFirebaseIdToken = async (req, res, next) => {
     functions.logger.error("Error while verifying Firebase ID token:", error);
     res
       .status(403)
-      .json({responseCode: "ERROR", data: { errorMessage: "Unauthorized. Error while verifying Firebase ID token: " + error}});
+      .json({
+        responseCode: "ERROR",
+        data: {
+          errorMessage:
+            "Unauthorized. Error while verifying Firebase ID token: " + error,
+        },
+      });
     return;
   }
 };
@@ -513,6 +517,19 @@ const validateFirebaseIdToken = async (req, res, next) => {
 app.use(cors2);
 // app.use(cookieParser);
 app.use(validateFirebaseIdToken);
+
+app.post("/deleteVectors", async (req, res) => {
+  const { videoID } = req.body;
+
+  try {
+    const deleteResponse = await deleteNamespaceVectors(videoID);
+    res.json(deleteResponse);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ responseCode: "ERROR", data: { errorMessage: err } });
+  }
+});
 
 app.post("/", async (req, res) => {
   // @ts-ignore
@@ -629,21 +646,20 @@ app.post("/", async (req, res) => {
           try {
             await index.upsert({ upsertRequest });
             console.log("done upsert: " + percentage + "%");
-  
+
             sendEventStreamData({
               responseCode: "SUCCESS",
               data: { percentage },
             });
           } catch (err) {
-            console.error(err)
-            await deleteNamespaceVectors(videoID)
+            console.error(err);
+            await deleteNamespaceVectors(videoID);
 
             sendEventStreamData({
               responseCode: "ERROR",
               data: { errorMessage: err },
             });
           }
-         
         }
       ).then(async () => {
         const { embedding } = await getEmbedding(query);
@@ -667,7 +683,6 @@ app.post("/", async (req, res) => {
         res.end();
       });
     }
-
   } catch (error) {
     console.error("Error:", error.message);
     sendEventStreamData({
@@ -681,4 +696,7 @@ app.post("/", async (req, res) => {
 // This HTTPS endpoint can only be accessed by your Firebase Users.
 // Requests need to be authorized by providing an `Authorization` HTTP header
 // with value `Bearer <Firebase ID Token>`.
-exports.hypersearch = onRequest(app);
+exports.hypersearch = onRequest({
+  timeoutSeconds: 300,
+  memory: "1GiB",
+}, app);

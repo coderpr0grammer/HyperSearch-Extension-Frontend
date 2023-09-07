@@ -260,8 +260,23 @@ const Youtube = () => {
                 }
               }
             })
-            .catch((err) => {
+            .catch(async (err) => {
               console.error("error fetching api: ", err);
+
+              const deleteVectors = await fetch ("http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch/deleteVectors" {
+                method: "POST",
+                cache: "no-cache",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${idToken}`,
+                },
+                body: JSON.stringify({
+                  videoID: vid
+                }),
+              })
+
+              console.log("deletevectors: ", deleteVectors)
+
               setError(
                 "We had trouble processing this video. Please try again later or contact support at danielgorg9@gmail.com. Sorry for the inconvenience!"
               );
