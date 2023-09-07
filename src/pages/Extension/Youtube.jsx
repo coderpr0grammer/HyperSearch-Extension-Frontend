@@ -263,7 +263,8 @@ const Youtube = () => {
             .catch(async (err) => {
               console.error("error fetching api: ", err);
 
-              const deleteVectors = await fetch ("http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch/deleteVectors" {
+              const deleteVectors = await fetch ("http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch/deleteVectors", 
+               {
                 method: "POST",
                 cache: "no-cache",
                 headers: {
