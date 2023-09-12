@@ -250,7 +250,7 @@ const Youtube = () => {
           //   // keepalive: true,
           //   headers: {
           //     "Content-Type": "application/json",
-          //     // Accept: "text/event-stream",
+          //     Accept: "text/event-stream",
           //     Authorization: `Bearer ${idToken}`,
           //   },
           //   body: JSON.stringify(data),
@@ -393,14 +393,14 @@ const Youtube = () => {
             style={{ display: displayNone ? "none" : "block" }}
             ref={resultsContainerRef}
           >
-            <SummaryComponent
+            {/* <SummaryComponent
               style={{
                 transitionDelay: `${1 * 0.06}s`,
                 display: displayNone ? "none" : "block",
               }}
               className={`${showResults ? "show" : ""}`}
               content={summarizedResponse}
-            />
+            /> */}
 
             {results.map((item, index) => (
               <ResultComponent
