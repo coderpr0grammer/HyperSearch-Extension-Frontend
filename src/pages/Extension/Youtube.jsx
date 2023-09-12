@@ -55,7 +55,7 @@ const Youtube = () => {
   const [idToken, setIdToken] = useState(null);
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [theme, setTheme] = useState('')
+  const [theme, setTheme] = useState("");
   // const [dark, setDark] = useState(false);
   const [displayNone, setDisplayNone] = useState(true);
   const [globalQuery, setGlobalQuery] = useState("");
@@ -115,18 +115,13 @@ const Youtube = () => {
     }
   }, [showResults]);
 
-  useEffect(()=> {
+  useEffect(() => {
+    const urlParams = new URLSearchParams(new URL(window.location.href).search);
 
-    const urlParams = new URLSearchParams(
-      new URL(window.location.href).search
-    );
-
-    setTheme(urlParams.get("theme"))
-
-  }, window.location.href)
+    setTheme(urlParams.get("theme"));
+  }, window.location.href);
 
   const auth = getAuth();
-
 
   useEffect(() => {
     (async () => {
@@ -163,7 +158,7 @@ const Youtube = () => {
             console.log("YouTube is in light mode");
           }
 
-          setDisplayNone(true)
+          setDisplayNone(true);
           setError("");
           setGlobalQuery(query);
           setLoading(true);
@@ -178,7 +173,12 @@ const Youtube = () => {
           const url = "https://hypersearch-i7nkqebqsa-uc.a.run.app/";
 
           const urlTest =
-            "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch";
+            "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch/normal_hypersearch";
+
+          const testPythonURL =
+            "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch_api/normal_hypersearch";
+          
+          const livePythonURL = "https://hypersearch-api-i7nkqebqsa-uc.a.run.app/normal_hypersearch"
 
           let data = {
             indexName: "video-embeddings",
@@ -187,102 +187,158 @@ const Youtube = () => {
             subscribedToPro: subscribedToPro,
           };
 
-          fetch(
-            url,
-            {
-              method: "POST",
-              cache: "no-cache",
-              keepalive: true,
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "text/event-stream",
-                Authorization: `Bearer ${idToken}`,
-              },
-              body: JSON.stringify(data),
-            }
-          )
-            .then(async (res) => {
-              const reader = res.body.getReader();
+          fetch(livePythonURL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${idToken}`, 
+            },
+            body: JSON.stringify(data),
+          })
+            .then((res) => res.json())
+            .then(async (response) => {
+              console.log(response)
+              const { responseCode, data } = response;
 
-              while (true) {
-                setLoading(true);
-                const { value, done } = await reader.read();
+              if (responseCode == "ERROR") {
+                setError(response.data.errorMessage);
+                setLoading(false);
+                return;
+              } else if (responseCode == "SUCCESS") {
+                if (data.searchResult) {
+                  console.log(response);
 
-                if (done) {
-                  setLoading(false);
-                  break;
-                }
+                  setSummarizedResponse(data.summarizedResponse);
 
-                const response = JSON.parse(new TextDecoder().decode(value));
+                  console.log(data.searchResult.matches[0].metadata.timeStamp)
+                  setResults(data.searchResult.matches);
 
-                const { responseCode, data } = response;
+                  setDisplayNone(false);
 
-                console.log(response);
+                  setTimeout(() => {
+                    setLoading(false);
+                    setShowResults(true);
+                  }, 300);
 
-                if (responseCode === "ERROR") {
-                  setError(response.data.errorMessage);
-                  // alert(response.data.errorMessage);
-                  setLoading(false);
-                  break;
-                } else if (responseCode === "SUCCESS") {
-                  if (data.percentage) {
-                    //still in progress
-                    console.log("progress: ", data.percentage);
-                    setUpsertProgress(data.percentage);
-                  } else if (data.searchResult) {
-                    console.log(data);
+                  const userRef = doc(db, "users", user.uid);
 
-                    setSummarizedResponse(data.summarizedResponse);
-                    setResults(data.searchResult.matches);
+                  const update = await updateDoc(userRef, {
+                    searchesToday: increment(1),
+                    lifetimeSearches: increment(1),
+                  });
 
-                    setDisplayNone(false);
+                  setSearchesToday(searchesToday + 1);
 
-                    setTimeout(() => {
-                      setLoading(false);
-                      setShowResults(true);
-                    }, 300);
-
-                    const userRef = doc(db, "users", user.uid);
-
-                    const update = await updateDoc(userRef, {
-                      searchesToday: increment(1),
-                      lifetimeSearches: increment(1),
-                    });
-
-                    setSearchesToday(searchesToday + 1);
-
-                    if (freeLimit - searchesToday < 1 && !isAdmin) {
-                      setLimitReached(true);
-                    }
-
-                    // getUserData2()
+                  if (freeLimit - searchesToday < 1 && !isAdmin) {
+                    setLimitReached(true);
                   }
+
+                  // getUserData2()
                 }
               }
+            }).catch((err)=> {
+              setLoading(false)
+              console.error(err)
+              setError(err)
+              setDisplayNone(false);
+
             })
-            .catch(async (err) => {
-              console.error("error fetching api: ", err);
 
-              const deleteVectors = await fetch ("http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch/deleteVectors", 
-               {
-                method: "POST",
-                cache: "no-cache",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${idToken}`,
-                },
-                body: JSON.stringify({
-                  videoID: vid
-                }),
-              })
+          // fetch(pythonURL, {
+          //   method: "POST",
+          //   // cache: "no-cache",
+          //   // keepalive: true,
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //     // Accept: "text/event-stream",
+          //     Authorization: `Bearer ${idToken}`,
+          //   },
+          //   body: JSON.stringify(data),
+          // })
+          //   .then(async (res) => {
+          //     const reader = res.body.getReader();
 
-              console.log("deletevectors: ", deleteVectors)
+          //     while (true) {
+          //       setLoading(true);
+          //       const { value, done } = await reader.read();
 
-              setError(
-                "We had trouble processing this video. Please try again later or contact support at danielgorg9@gmail.com. Sorry for the inconvenience!"
-              );
-              setLoading(false);
-            });
+          //       if (done) {
+          //         setLoading(false);
+          //         break;
+          //       }
+
+          //       const response = JSON.parse(new TextDecoder().decode(value));
+
+          //       const { responseCode, data } = response;
+
+          //       console.log(response);
+
+          //       if (responseCode === "ERROR") {
+          //         setError(response.data.errorMessage);
+          //         // alert(response.data.errorMessage);
+          //         setLoading(false);
+          //         break;
+          //       } else if (responseCode === "SUCCESS") {
+          //         if (data.percentage) {
+          //           //still in progress
+          //           console.log("progress: ", data.percentage);
+          //           setUpsertProgress(data.percentage);
+          //         } else if (data.searchResult) {
+          //           console.log(data);
+
+          //           setSummarizedResponse(data.summarizedResponse);
+          //           setResults(data.searchResult.matches);
+
+          //           setDisplayNone(false);
+
+          //           setTimeout(() => {
+          //             setLoading(false);
+          //             setShowResults(true);
+          //           }, 300);
+
+          //           const userRef = doc(db, "users", user.uid);
+
+          //           const update = await updateDoc(userRef, {
+          //             searchesToday: increment(1),
+          //             lifetimeSearches: increment(1),
+          //           });
+
+          //           setSearchesToday(searchesToday + 1);
+
+          //           if (freeLimit - searchesToday < 1 && !isAdmin) {
+          //             setLimitReached(true);
+          //           }
+
+          //           // getUserData2()
+          //         }
+          //       }
+          //     }
+          //   })
+          //   .catch(async (err) => {
+          //     console.error("error fetching api: ", err);
+
+          //     const deleteVectors = await fetch(
+          //       "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch/deleteVectors",
+          //       {
+          //         method: "POST",
+          //         cache: "no-cache",
+          //         headers: {
+          //           "Content-Type": "application/json",
+          //           Authorization: `Bearer ${idToken}`,
+          //         },
+          //         body: JSON.stringify({
+          //           videoID: vid,
+          //         }),
+          //       }
+          //     );
+
+          //     console.log("deletevectors: ", deleteVectors);
+
+          //     setError(
+          //       "We had trouble processing this video. Please try again later or contact support at danielgorg9@gmail.com. Sorry for the inconvenience!"
+          //     );
+          //     setLoading(false);
+          //   });
         }}
       />
       {upsertProgress !== 0 && upsertProgress !== 100 && (
@@ -332,7 +388,11 @@ const Youtube = () => {
             </p>
           </button>
 
-          <div className="results-container" style={{display: displayNone ? 'none' : 'block'}} ref={resultsContainerRef}>
+          <div
+            className="results-container"
+            style={{ display: displayNone ? "none" : "block" }}
+            ref={resultsContainerRef}
+          >
             <SummaryComponent
               style={{
                 transitionDelay: `${1 * 0.06}s`,
@@ -346,7 +406,7 @@ const Youtube = () => {
               <ResultComponent
                 index={index}
                 content={item.metadata.originalText}
-                timeStamp={Math.floor(item.metadata.timeStamp / 1000)}
+                timeStamp={Math.floor(item.metadata.timeStamp)}
                 query={globalQuery}
                 key={item.id}
                 dark={dark}

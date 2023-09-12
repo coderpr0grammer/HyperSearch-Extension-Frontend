@@ -501,15 +501,13 @@ const validateFirebaseIdToken = async (req, res, next) => {
     return;
   } catch (error) {
     functions.logger.error("Error while verifying Firebase ID token:", error);
-    res
-      .status(403)
-      .json({
-        responseCode: "ERROR",
-        data: {
-          errorMessage:
-            "Unauthorized. Error while verifying Firebase ID token: " + error,
-        },
-      });
+    res.status(403).json({
+      responseCode: "ERROR",
+      data: {
+        errorMessage:
+          "Unauthorized. Error while verifying Firebase ID token: " + error,
+      },
+    });
     return;
   }
 };
@@ -693,10 +691,141 @@ app.post("/", async (req, res) => {
   }
 });
 
+app.post("/normal_hypersearch", async (req, res) => {
+  // @ts-ignore
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  // res.flushHeaders();
+
+  if (req.method !== "POST") {
+    res.status(405).json({
+      responseCode: "ERROR",
+      response: "Method not alllowed",
+    });
+  }
+
+  let { indexName, videoID, query, subscribedToPro } = req.body;
+
+  try {
+    let index = await getIndexRef(indexName);
+
+    // const doesNamespaceExist = await checkIfNamespaceExists(index, videoID);
+
+    // console.log("does namespace exist", doesNamespaceExist);
+
+    // if (!doesNamespaceExist) {
+    //   //only query
+    //   console.log("namespace exists");
+
+    //   const { embedding } = await getEmbedding(query);
+
+    //   const searchResult = await search(index, videoID, embedding);
+
+    //   const summarizedResponse = await getSummarizedResponse(
+    //     query,
+    //     searchResult
+    //   );
+
+    //   console.log(summarizedResponse);
+
+    //   res.json({
+    //     responseCode: "SUCCESS",
+    //     data: {
+    //       searchResult,
+    //       summarizedResponse,
+    //     },
+    //   });
+
+    //   res.end();
+    // } else {
+      //upsert and query
+
+      const youtubeTranscriptApiURl = `https://yt-transcript-api.vercel.app/api/?videoID=${videoID}`;
+
+      let transcript = await fetch(youtubeTranscriptApiURl)
+        .then((response) => response.json())
+        .then((res) => {
+          if (res.responseCode === "ERROR") {
+            throw new Error(res.response);
+          } else {
+            return res.response;
+          }
+        });
+
+      console.log(transcript);
+      transcript = reformChunks(transcript);
+      let embeddingRefs = [];
+
+      const vectors = await normalEmbedTranscript(transcript, videoID);
+
+      const upsertResponse = await normalUpsert(index, videoID, vectors);
+
+      res.json({
+        responseCode: "SUCCESS",
+        data: {
+          response: upsertResponse,
+          embeddingRefs: embeddingRefs,
+        },
+      });
+    // }
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.json({
+      responseCode: "ERROR",
+      data: { errorMessage: error },
+    });
+  }
+});
+
+const normalUpsert = async (index, videoID, vectors) => {
+  try {
+    const upsertRequest = {
+      vectors: vectors,
+      namespace: videoID,
+    };
+    const response = await index.upsert({ upsertRequest });
+
+    return response;
+  } catch (err) {
+    throw new Error(err)
+  }
+};
+
+const normalEmbedTranscript = async (segments, videoID) => {
+  let vectors = [];
+  for (let [index, segment] of segments.entries()) {
+    let { text, offset } = segment;
+    let embeddingID = v4();
+
+    text = text.replace(/\n/g, " ");
+    console.log("processing segment...", text);
+
+    const embedding = await getEmbedding(text).then(
+      (result) => result.embedding
+    );
+
+    // const percentage = Math.floor((index / (segments.length - 1)) * 100);
+
+    vectors.push({
+      id: embeddingID,
+      values: embedding,
+      metadata: {
+        videoID: videoID,
+        originalText: text,
+        timeStamp: offset,
+      },
+    });
+  }
+
+  return vectors;
+};
+
 // This HTTPS endpoint can only be accessed by your Firebase Users.
 // Requests need to be authorized by providing an `Authorization` HTTP header
 // with value `Bearer <Firebase ID Token>`.
-exports.hypersearch = onRequest({
-  timeoutSeconds: 300,
-  memory: "1GiB",
-}, app);
+exports.hypersearch = onRequest(
+  {
+    timeoutSeconds: 300,
+    memory: "1GiB",
+  },
+  app
+);
