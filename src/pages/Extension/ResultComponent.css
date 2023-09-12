@@ -11,7 +11,7 @@
 
 .responseComponent {
     opacity: 0;
-    transition: opacity 0.3s ease-in-out, box-shadow 0.2s ease-out;
+    transition: opacity 0.3s ease-in-out, box-shadow 0.2s ease-out, border-color 0.2s ease;
     border-color:rgba(89, 138, 238, 0.5);
     border-style: solid;
     border-width: 0 0 2px 2px;
@@ -29,7 +29,8 @@
 }
 
 .responseComponent:hover {
-    border-width: 0 0 3px 3px;
+    border-color:rgba(89, 138, 238, 0.8);
+    border-width: 0 0 2px 2px;
 }
 
 
