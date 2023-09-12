@@ -52,7 +52,7 @@ const Youtube = () => {
   const [results, setResults] = useState([]);
   const [error, setError] = useState("");
   const [extensionActive, setExtensionActive] = useState(false);
-  const [idToken, setIdToken] = useState(null);
+  // const [idToken, setIdToken] = useState(null);
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(false);
   const [theme, setTheme] = useState("");
@@ -123,13 +123,13 @@ const Youtube = () => {
 
   const auth = getAuth();
 
-  useEffect(() => {
-    (async () => {
-      const idToken = await auth.currentUser.getIdToken();
-      // console.log(idToken)
-      setIdToken(idToken);
-    })();
-  }, [auth.currentUser]);
+  // useEffect(() => {
+  //   (async () => {
+  //     const idToken = await auth.currentUser.getIdToken();
+  //     // console.log(idToken)
+  //     setIdToken(idToken);
+  //   })();
+  // }, [auth.currentUser]);
 
   return (
     <div
@@ -144,7 +144,11 @@ const Youtube = () => {
     >
       <Searchbar
         loading={loading}
-        onSubmit={(query) => {
+        onSubmit={async (query) => {
+          const idToken = await auth.currentUser.getIdToken();
+          // console.log(idToken)
+          // setIdToken(idToken);
+
           const isDarkMode =
             document.documentElement.getAttribute("dark") === "true";
 
@@ -177,8 +181,9 @@ const Youtube = () => {
 
           const testPythonURL =
             "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch_api/normal_hypersearch";
-          
-          const livePythonURL = "https://hypersearch-api-i7nkqebqsa-uc.a.run.app/normal_hypersearch"
+
+          const livePythonURL =
+            "https://hypersearch-api-i7nkqebqsa-uc.a.run.app/normal_hypersearch";
 
           let data = {
             indexName: "video-embeddings",
@@ -191,13 +196,13 @@ const Youtube = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${idToken}`, 
+              Authorization: `Bearer ${idToken}`,
             },
             body: JSON.stringify(data),
           })
             .then((res) => res.json())
             .then(async (response) => {
-              console.log(response)
+              console.log(response);
               const { responseCode, data } = response;
 
               if (responseCode == "ERROR") {
@@ -210,7 +215,7 @@ const Youtube = () => {
 
                   setSummarizedResponse(data.summarizedResponse);
 
-                  console.log(data.searchResult.matches[0].metadata.timeStamp)
+                  console.log(data.searchResult.matches[0].metadata.timeStamp);
                   setResults(data.searchResult.matches);
 
                   setDisplayNone(false);
@@ -236,13 +241,13 @@ const Youtube = () => {
                   // getUserData2()
                 }
               }
-            }).catch((err)=> {
-              setLoading(false)
-              console.error(err)
-              setError(err)
-              setDisplayNone(false);
-
             })
+            .catch((err) => {
+              setLoading(false);
+              console.error(err);
+              setError(err);
+              setDisplayNone(false);
+            });
 
           // fetch(pythonURL, {
           //   method: "POST",
