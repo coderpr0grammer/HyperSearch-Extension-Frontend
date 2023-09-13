@@ -180,7 +180,7 @@ const Youtube = () => {
             "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch/normal_hypersearch";
 
           const streamedTestPythonURL =
-            "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch_api/streamed_hypersearch";
+            "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch_api";
 
           const livePythonURL =
             "https://hypersearch-api-i7nkqebqsa-uc.a.run.app/normal_hypersearch";
@@ -251,7 +251,7 @@ const Youtube = () => {
           //     setDisplayNone(false);
           //   });
 
-          fetch(`${liveStreamedPythonAPIBase}/streamed_hypersearch`, {
+          fetch(`${streamedTestPythonURL}/streamed_hypersearch`, {
             method: "POST",
             cache: "no-cache",
             keepalive: true,

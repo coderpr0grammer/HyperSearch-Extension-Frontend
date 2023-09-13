@@ -87,6 +87,8 @@ const AuthenticationContextProvider = ({ children }) => {
 
       const lastSearchesReset = docSnapData.lastSearchesReset;
 
+      console.log(lastSearchesReset)
+
       const d = new Date();
       const today = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
       console.log('reset', lastSearchesReset, today)
@@ -116,6 +118,8 @@ const AuthenticationContextProvider = ({ children }) => {
 
       const lastSearchesReset = docSnapData.lastSearchesReset;
 
+      console.log(lastSearchesReset)
+
       const d = new Date();
       const today = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
       console.log(lastSearchesReset, today)
@@ -134,22 +138,24 @@ const AuthenticationContextProvider = ({ children }) => {
 
   useEffect(() => {
 
-    auth.onAuthStateChanged((u) => {
-      if (location.pathname != "/popup") {
-        if (u) {
-          // console.log("changed: ", u);
-          setUser(u);
-          setUid(u.uid);
-          // console.log("params: ", new URLSearchParams(new URL(window.location.href).search).get('vid'))
-          startDataListeners(u);
-          navigateWithQueryVars(navigate, '/')
-        } else {
-          navigateWithQueryVars(navigate, '/login')
-
-        }
-      }
-    });
+   
   }, [])
+
+  auth.onAuthStateChanged((u) => {
+    if (location.pathname != "/popup") {
+      if (u) {
+        // console.log("changed: ", u);
+        setUser(u);
+        setUid(u.uid);
+        // console.log("params: ", new URLSearchParams(new URL(window.location.href).search).get('vid'))
+        startDataListeners(u);
+        navigateWithQueryVars(navigate, '/')
+      } else {
+        navigateWithQueryVars(navigate, '/login')
+
+      }
+    }
+  });
 
 
   return (
