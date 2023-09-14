@@ -185,7 +185,7 @@ const Youtube = () => {
           const livePythonURL =
             "https://hypersearch-api-i7nkqebqsa-uc.a.run.app/normal_hypersearch";
 
-          const liveStreamedPythonAPIBase = "https://hypersearch-api-i7nkqebqsa-uc.a.run.app"
+          const liveStreamedPythonAPIBase = "https://hypersearch-api-i7nkqebqsa-uc.a.run.app/"
 
           let data = {
             indexName: "video-embeddings",
@@ -251,7 +251,8 @@ const Youtube = () => {
           //     setDisplayNone(false);
           //   });
 
-          fetch(`${streamedTestPythonURL}/streamed_hypersearch`, {
+
+          fetch(`${liveStreamedPythonAPIBase}new_streamed_hypersearch`, {
             method: "POST",
             cache: "no-cache",
             keepalive: true,
@@ -279,6 +280,8 @@ const Youtube = () => {
                 const response = JSON.parse(new TextDecoder().decode(value));
 
                 const { responseCode, data } = response;
+
+                console.log("response")
 
                 console.log(response);
 
@@ -352,7 +355,6 @@ const Youtube = () => {
                 console.error("Could not remove stray vectors: ", err)
               })
 
-              console.log("deleteVectors", deleteVectors)
 
               if (err instanceof TypeError && err.message === "Failed to fetch") {
                 // Network or CORS-related error
@@ -369,6 +371,7 @@ const Youtube = () => {
               // You can also consider rethrowing the error for further handling or logging.
               // throw err;
             });
+
          
           
           

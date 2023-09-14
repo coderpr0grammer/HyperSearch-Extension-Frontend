@@ -137,26 +137,26 @@ const AuthenticationContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-
+    auth.onAuthStateChanged((u) => {
+      if (location.pathname != "/popup") {
+        if (u) {
+          // console.log("changed: ", u);
+          setUser(u);
+          setUid(u.uid);
+          // console.log("params: ", new URLSearchParams(new URL(window.location.href).search).get('vid'))
+          startDataListeners(u);
+          navigateWithQueryVars(navigate, '/')
+        } else {
+          navigateWithQueryVars(navigate, '/login')
+  
+        }
+      }
+    });
+  
    
   }, [])
 
-  auth.onAuthStateChanged((u) => {
-    if (location.pathname != "/popup") {
-      if (u) {
-        // console.log("changed: ", u);
-        setUser(u);
-        setUid(u.uid);
-        // console.log("params: ", new URLSearchParams(new URL(window.location.href).search).get('vid'))
-        startDataListeners(u);
-        navigateWithQueryVars(navigate, '/')
-      } else {
-        navigateWithQueryVars(navigate, '/login')
-
-      }
-    }
-  });
-
+ 
 
   return (
     <AuthenticationContext.Provider
