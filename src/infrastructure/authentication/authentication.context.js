@@ -36,7 +36,7 @@ const AuthenticationContextProvider = ({ children }) => {
 
 
   const updateUserData = async (params) => {
-    const userRef = doc(db, 'users', uid);
+    const userRef = doc(db, 'users', auth.currentUser.uid);
 
     await updateDoc(userRef, params)
   }
@@ -125,9 +125,9 @@ const AuthenticationContextProvider = ({ children }) => {
       console.log(lastSearchesReset, today)
 
 
-      if (lastSearchesReset != today) {
-        updateUserData({ searchesToday: 0, lastSearchesReset: today })
-      }
+      // if (lastSearchesReset != today) {
+      //   updateUserData({ searchesToday: 0, lastSearchesReset: today })
+      // }
 
     } else {
       // doc.data() will be undefined in this case
@@ -138,11 +138,12 @@ const AuthenticationContextProvider = ({ children }) => {
 
   useEffect(() => {
     auth.onAuthStateChanged((u) => {
+      console.log("user changed")
       if (location.pathname != "/popup") {
         if (u) {
           // console.log("changed: ", u);
-          setUser(u);
-          setUid(u.uid);
+          setUser(auth.currentUser);
+          setUid(auth.currentUser.uid);
           // console.log("params: ", new URLSearchParams(new URL(window.location.href).search).get('vid'))
           startDataListeners(u);
           navigateWithQueryVars(navigate, '/')
@@ -152,8 +153,6 @@ const AuthenticationContextProvider = ({ children }) => {
         }
       }
     });
-  
-   
   }, [])
 
  
