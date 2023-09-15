@@ -8,8 +8,8 @@ const ProgressBar = ({ progress, color }) => {
         role="progressbar"
         style={{
           width: `${progress}%`,
-          transition: "width 0.3s",
-          backgroundColor: color
+          transition: "width 1s",
+          background: color
         }}
         aria-valuemin="0"
         aria-valuemax="100"

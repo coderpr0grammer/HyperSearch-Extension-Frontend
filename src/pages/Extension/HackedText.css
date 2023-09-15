@@ -1,0 +1,24 @@
+.hackedText {
+    background:conic-gradient(from 90deg at 40% -25%,#ff7e00,#8903f7,#ee07d3,#0a8ee6,#0d91de,#1092d6,#03f,#00cfa4,#cf1261,#d61039,red,#ee6907,#f59b01,gold,gold,#cf6464);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display:inline-block;
+    margin: 0;
+    filter: brightness(1), contrast(500);
+    animation: loopBackground 2s ease infinite alternate;
+    background-size: 200% 100%;
+}
+
+@keyframes loopBackground {
+    0% {
+      background-position: 0 0;
+    }
+    50% {
+        background-position: 50% 50%;
+      }
+    100% {
+      background-position: 0% 0%;
+    }
+  }
+  

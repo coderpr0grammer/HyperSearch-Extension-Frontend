@@ -47,6 +47,7 @@ import { functions } from "../../utils/firebaseConfig";
 import { AuthenticationContext } from "../../infrastructure/authentication/authentication.context";
 import ProgressBar from "./ProgressBar";
 import SummaryComponent from "./SummaryComponent";
+import HackedText from "./HackedText";
 
 const Youtube = () => {
   const [results, setResults] = useState([]);
@@ -59,9 +60,10 @@ const Youtube = () => {
   // const [dark, setDark] = useState(false);
   const [displayNone, setDisplayNone] = useState(true);
   const [globalQuery, setGlobalQuery] = useState("");
-  const [upsertProgress, setUpsertProgress] = useState(0);
+  const [upsertProgress, setUpsertProgress] = useState(-1);
   const [summarizedResponse, setSummarizedResponse] = useState("");
   const [moreResultsOpacity, setMoreResultsOpacity] = useState(1);
+  const [statusText, setStatusText] = useState('');
   const extensionContainerRef = useRef(null);
   const resultsContainerRef = useRef(null);
   const errorContainer = useRef(null);
@@ -281,6 +283,8 @@ const Youtube = () => {
 
                 const { responseCode, data } = response;
 
+                // setUpsertProgress(25)
+                
                 console.log("response")
 
                 console.log(response);
@@ -292,24 +296,54 @@ const Youtube = () => {
                   setLoading(false);
                   break;
                 } else if (responseCode === "SUCCESS") {
-                  if (data.percentage) {
+                  if (data.status) {
                     //still in progress
-                    console.log("progress: ", data.percentage);
-                    setUpsertProgress(data.percentage);
+                    const { status } = data;
+
+                    switch(status) {
+                      case "PROCESSING_VIDEO":
+                        setUpsertProgress(0)
+                        setTimeout(()=> {
+                          setUpsertProgress(25)
+                        }, 1000)
+                        break;
+                      case "DONE_EMBEDDING":
+                        setUpsertProgress(75)
+                        break;
+                      case "STARTING_UPSERT":
+                          setUpsertProgress(85)
+                          break;
+                      case "DONE_UPSERT":
+                        setUpsertProgress(99)
+                        break;
+                      default:
+                        setUpsertProgress(1)
+                        break;
+                      
+                    }
+                    
                   } else if (data.searchResult) {
                     console.log(data);
 
-                    setUpsertProgress(100);
+                    setUpsertProgress(99);
+
 
                     setSummarizedResponse(data.summarizedResponse);
                     setResults(data.searchResult.matches);
+
 
                     setDisplayNone(false);
 
                     setTimeout(() => {
                       setLoading(false);
                       setShowResults(true);
+
                     }, 300);
+
+                    setUpsertProgress(100);
+                    setUpsertProgress(-1);
+
+
 
                     const userRef = doc(db, "users", user.uid);
 
@@ -336,7 +370,7 @@ const Youtube = () => {
               console.error("Fetch error:", err);
 
               const deleteVectors = await fetch(
-                `${liveStreamedPythonAPIBase}/deleteVectorsPOST`,
+                `${liveStreamedPythonAPIBase}deleteVectorsPOST`,
                 {
                   method: "POST",
                   headers: {
@@ -377,7 +411,8 @@ const Youtube = () => {
           
         }}
       />
-      {upsertProgress !== 0 && upsertProgress !== 100 && (
+
+      {upsertProgress !== -1 && upsertProgress !== 100 && loading && (
         <ProgressBar color="#e575e8" progress={upsertProgress} />
       )}
 
