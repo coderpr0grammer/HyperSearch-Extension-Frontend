@@ -189,7 +189,7 @@ const Youtube = () => {
 
           const liveStreamedPythonAPIBase = "https://hypersearch-api-i7nkqebqsa-uc.a.run.app/"
           
-          const testMode = true;
+          const testMode = false;
           const apiUrl = testMode ? streamedTestPythonURL : liveStreamedPythonAPIBase
 
           let data = {
@@ -218,21 +218,20 @@ const Youtube = () => {
               while (true) {
                 setLoading(true);
                 const { value, done } = await reader.read();
+                const decodedValue = new TextDecoder().decode(value)
+
+                // if (decodedValue.split('\n').filter(Boolean).length)
+                // console.log('decodedValue', decodedValue)
 
                 if (done) {
                   setLoading(false);
                   break;
                 }
+                const response = JSON.parse(decodedValue);
 
-                const response = JSON.parse(new TextDecoder().decode(value));
 
                 const { responseCode, data } = response;
 
-                // setUpsertProgress(25)
-                
-                console.log("response")
-
-                console.log(response);
 
                 if (responseCode === "ERROR") {
                   setError(response.data.errorMessage);
