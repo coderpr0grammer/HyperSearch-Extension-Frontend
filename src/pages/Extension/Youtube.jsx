@@ -188,6 +188,9 @@ const Youtube = () => {
             "https://hypersearch-api-i7nkqebqsa-uc.a.run.app/normal_hypersearch";
 
           const liveStreamedPythonAPIBase = "https://hypersearch-api-i7nkqebqsa-uc.a.run.app/"
+          
+          const testMode = true;
+          const apiUrl = testMode ? streamedTestPythonURL : liveStreamedPythonAPIBase
 
           let data = {
             indexName: "video-embeddings",
@@ -196,7 +199,7 @@ const Youtube = () => {
             subscribedToPro: subscribedToPro,
           };
 
-          fetch(`${liveStreamedPythonAPIBase}new_streamed_hypersearch`, {
+          fetch(`${apiUrl}new_streamed_hypersearch`, {
             method: "POST",
             cache: "no-cache",
             keepalive: true,
@@ -247,7 +250,7 @@ const Youtube = () => {
                         setUpsertProgress(0)
                         setTimeout(()=> {
                           setUpsertProgress(25)
-                        }, 1000)
+                        }, 500)
                         break;
                       case "DONE_EMBEDDING":
                         setUpsertProgress(75)
@@ -312,7 +315,7 @@ const Youtube = () => {
               console.error("Fetch error:", err);
 
               const deleteVectors = await fetch(
-                `${liveStreamedPythonAPIBase}deleteVectorsPOST`,
+                `${apiUrl}deleteVectorsPOST`,
                 {
                   method: "POST",
                   headers: {
