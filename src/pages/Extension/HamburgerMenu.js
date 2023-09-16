@@ -49,14 +49,14 @@ const HamburgerMenu = () => {
 
     const docHeight = document.documentElement.offsetHeight;
 
-    // if (isOpen) {
-    //   window.parent.postMessage({ type: "hypersearch-resize", height: docHeight }, "*");
-    // } else {
-    //   window.parent.postMessage(
-    //     { type: "hypersearch-resize", height: docHeight + menuRef.current.offsetHeight },
-    //     "*"
-    //   );
-    // }
+    if (isOpen) {
+      window.parent.postMessage({ type: "hypersearch-resize", height: docHeight }, "*");
+    } else {
+      window.parent.postMessage(
+        { type: "hypersearch-resize", height: docHeight + menuRef.current.offsetHeight },
+        "*"
+      );
+    }
     setIsOpen(!isOpen);
   };
 
