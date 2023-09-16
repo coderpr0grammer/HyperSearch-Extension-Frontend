@@ -182,7 +182,7 @@ const Youtube = () => {
             "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch/normal_hypersearch";
 
           const streamedTestPythonURL =
-            "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch_api";
+            "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch_api/";
 
           const livePythonURL =
             "https://hypersearch-api-i7nkqebqsa-uc.a.run.app/normal_hypersearch";
@@ -195,64 +195,6 @@ const Youtube = () => {
             query: query,
             subscribedToPro: subscribedToPro,
           };
-
-          // fetch(livePythonURL, {
-          //   method: "POST",
-          //   headers: {
-          //     "Content-Type": "application/json",
-          //     Authorization: `Bearer ${idToken}`,
-          //   },
-          //   body: JSON.stringify(data),
-          // })
-          //   .then((res) => res.json())
-          //   .then(async (response) => {
-          //     console.log(response);
-          //     const { responseCode, data } = response;
-
-          //     if (responseCode == "ERROR") {
-          //       setError(response.data.errorMessage);
-          //       setLoading(false);
-          //       return;
-          //     } else if (responseCode == "SUCCESS") {
-          //       if (data.searchResult) {
-          //         console.log(response);
-
-          //         setSummarizedResponse(data.summarizedResponse);
-
-          //         console.log(data.searchResult.matches[0].metadata.timeStamp);
-          //         setResults(data.searchResult.matches);
-
-          //         setDisplayNone(false);
-
-          //         setTimeout(() => {
-          //           setLoading(false);
-          //           setShowResults(true);
-          //         }, 300);
-
-          //         const userRef = doc(db, "users", user.uid);
-
-          //         const update = await updateDoc(userRef, {
-          //           searchesToday: increment(1),
-          //           lifetimeSearches: increment(1),
-          //         });
-
-          //         setSearchesToday(searchesToday + 1);
-
-          //         if (freeLimit - searchesToday < 1 && !isAdmin) {
-          //           setLimitReached(true);
-          //         }
-
-          //         // getUserData2()
-          //       }
-          //     }
-          //   })
-          //   .catch((err) => {
-          //     setLoading(false);
-          //     console.error(err);
-          //     setError(err);
-          //     setDisplayNone(false);
-          //   });
-
 
           fetch(`${liveStreamedPythonAPIBase}new_streamed_hypersearch`, {
             method: "POST",
@@ -399,7 +341,7 @@ const Youtube = () => {
                 console.error("Other fetch-related error. An error occurred while fetching the data. Please try again later or contact support.")
                 setError("Oops! It seems like we had an issue processing your search. Please check your internet connection or contact support.")
               }
-          
+              setUpsertProgress(-1)
               setLoading(false);
           
               // You can also consider rethrowing the error for further handling or logging.
