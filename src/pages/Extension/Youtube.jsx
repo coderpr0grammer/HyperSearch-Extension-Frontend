@@ -191,7 +191,7 @@ const Youtube = () => {
           const liveStreamedPythonAPIBase =
             "https://hypersearch-api-i7nkqebqsa-uc.a.run.app/";
 
-          const testMode = true;
+          const testMode = false;
           const apiUrl = testMode
             ? streamedTestPythonURL
             : liveStreamedPythonAPIBase;
