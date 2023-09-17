@@ -14,7 +14,7 @@ const SummaryComponent = (props) => {
       style={{
         width: "100%",
         background: "transparent",
-        minHeight: 100,
+        // minHeight: 100,
         borderRadius: 0,
         boxSizing: "border-box",
         padding: 15,
