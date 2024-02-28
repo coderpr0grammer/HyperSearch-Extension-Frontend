@@ -55,7 +55,7 @@ const Youtube = () => {
   const [extensionActive, setExtensionActive] = useState(false);
   // const [idToken, setIdToken] = useState(null);
   const [showResults, setShowResults] = useState(false);
-  const [showSummary, setShowSummary] = useState(true)
+  const [showSummary, setShowSummary] = useState(true);
   const [loading, setLoading] = useState(false);
   const [theme, setTheme] = useState("");
   // const [dark, setDark] = useState(false);
@@ -238,7 +238,7 @@ const Youtube = () => {
                 if (responseCode === "ERROR") {
                   setError(response.data.errorMessage);
                   console.log(response.data.errorMessage);
-                  // alert(response.data.errorMessage);
+                  alert(response.data.errorMessage);
                   setLoading(false);
                   break;
                 } else if (responseCode === "SUCCESS") {
@@ -279,13 +279,13 @@ const Youtube = () => {
                     setTimeout(() => {
                       setLoading(false);
                       setShowResults(true);
-                      setShowSummary(true)
+                      setShowSummary(true);
                     }, 300);
 
                     setUpsertProgress(100);
                     setUpsertProgress(-1);
 
-                    setTimeout(()=> null,2000)
+                    setTimeout(() => null, 2000);
 
                     fetch(`${apiUrl}new_streamed_summarize`, {
                       method: "POST",
@@ -300,29 +300,30 @@ const Youtube = () => {
                         query: query,
                         results: data.searchResult.matches,
                       }),
-                    }).then(async (res) => {
-                      const reader = res.body.getReader();
-
-                      while (true) {
-                        const { value, done } = await reader.read();
-                        const decodedValue = new TextDecoder().decode(value);
-
-                        console.log("decodedValue", decodedValue);
-
-                        if (done) {
-                          break;
-                        }
-
-                        setSummarizedResponse(decodedValue)
-
-                      }
                     })
-                    .catch((err)=> {
+                      .then(async (res) => {
+                        const reader = res.body.getReader();
+
+                        while (true) {
+                          const { value, done } = await reader.read();
+                          const decodedValue = new TextDecoder().decode(value);
+
+                          console.log("decodedValue", decodedValue);
+
+                          if (done) {
+                            break;
+                          }
+
+                          setSummarizedResponse(decodedValue);
+                        }
+                      })
+                      .catch((err) => {
                         // Handle fetch errors specifically
                         console.error("Failed to get Summary error:", err);
-                        setSummarizedResponse("Oops! There was an error getting the summarized response. Please try again or contact support.")
-          
-                    })
+                        setSummarizedResponse(
+                          "Oops! There was an error getting the summarized response. Please try again or contact support."
+                        );
+                      });
 
                     //end of get summarized response
 
@@ -447,14 +448,16 @@ const Youtube = () => {
             style={{ display: displayNone ? "none" : "block" }}
             ref={resultsContainerRef}
           >
-            {showSummary && <SummaryComponent
-              style={{
-                transitionDelay: `${1 * 0.06}s`,
-                display: displayNone ? "none" : "block",
-              }}
-              className={`${showResults ? "show" : ""}`}
-              content={summarizedResponse}
-            />}
+            {showSummary && (
+              <SummaryComponent
+                style={{
+                  transitionDelay: `${1 * 0.06}s`,
+                  display: displayNone ? "none" : "block",
+                }}
+                className={`${showResults ? "show" : ""}`}
+                content={summarizedResponse}
+              />
+            )}
 
             {results.map((item, index) => (
               <ResultComponent
