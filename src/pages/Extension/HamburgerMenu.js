@@ -233,9 +233,15 @@ const HamburgerMenu = () => {
         )}
         <li className={isOpen ? "show" : ""}>
           <button
-            onClick={() => {
-              auth.signOut();
+            onClick={async () => {
+              try {
+                await auth.signOut()
               window.location.reload();
+
+              } catch (err) {
+                alert("Oops! Couldn't sign you out")
+              }
+              // console.log()
             }}
           >
             <FontAwesomeIcon icon={faRightFromBracket} /> Sign out

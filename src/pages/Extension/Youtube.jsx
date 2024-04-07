@@ -134,6 +134,114 @@ const Youtube = () => {
   //   })();
   // }, [auth.currentUser]);
 
+  const handleSearch = async (query) => {
+    try {
+      const idToken = await auth.currentUser.getIdToken();
+      // console.log(idToken)
+      // setIdToken(idToken);
+  
+      const isDarkMode =
+        document.documentElement.getAttribute("dark") === "true";
+  
+      if (isDarkMode) {
+        // YouTube is in dark mode
+        setDark(true);
+        console.log("YouTube is in dark mode");
+      } else {
+        // YouTube is in light
+        setDark(false);
+        console.log("YouTube is in light mode");
+      }
+  
+      setDisplayNone(true);
+      setError("");
+      setGlobalQuery(query);
+      setLoading(true);
+      setShowResults(false);
+  
+      const urlParams = new URLSearchParams(
+        new URL(window.location.href).search
+      );
+  
+      const vid = urlParams.get("vid");
+  
+      const url = "https://hypersearch-i7nkqebqsa-uc.a.run.app/";
+  
+      const normalTestPythonURL =
+        "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch/normal_hypersearch";
+  
+      const streamedTestPythonURL =
+        "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch_api/";
+  
+      const livePythonURL =
+        "https://hypersearch-api-i7nkqebqsa-uc.a.run.app/normal_hypersearch";
+  
+      const liveStreamedPythonAPIBase =
+        "https://hypersearch-api-i7nkqebqsa-uc.a.run.app/";
+  
+      const testMode = false;
+      const apiUrl = testMode
+        ? streamedTestPythonURL
+        : liveStreamedPythonAPIBase;
+  
+      let data = {
+        indexName: "video-embeddings",
+        videoID: vid,
+        query: query,
+        subscribedToPro: subscribedToPro,
+      };
+  
+      const response = await fetch(`${apiUrl}new_streamed_hypersearch`, {
+        method: "POST",
+        cache: "no-cache",
+        keepalive: true,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "text/event-stream",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+  
+      const reader = response.body.getReader();
+  
+      while (true) {
+        setLoading(true);
+        const { value, done } = await reader.read();
+        const decodedValue = new TextDecoder().decode(value);
+  
+        if (done) {
+          setLoading(false);
+          break;
+        }
+        const responseData = JSON.parse(decodedValue);
+  
+        const { responseCode, data } = responseData;
+  
+        if (responseCode === "ERROR") {
+          setError(data.errorMessage);
+          console.error(data.errorMessage);
+          alert(data.errorMessage);
+          setLoading(false);
+          break;
+        } else if (responseCode === "SUCCESS") {
+          // Process success response
+        } else {
+          console.log(responseData);
+        }
+      }
+    } catch (error) {
+      // Handle general errors
+      console.error("An error occurred:", error);
+      setError("Oops! An unexpected error occurred. Please try again or contact support.");
+      setLoading(false);
+    }
+  }
+
   return (
     <div
       id="main-popup-hypersearch"
@@ -147,253 +255,7 @@ const Youtube = () => {
     >
       <Searchbar
         loading={loading}
-        onSubmit={async (query) => {
-          const idToken = await auth.currentUser.getIdToken();
-          // console.log(idToken)
-          // setIdToken(idToken);
-
-          const isDarkMode =
-            document.documentElement.getAttribute("dark") === "true";
-
-          if (isDarkMode) {
-            // YouTube is in dark mode
-            setDark(true);
-            console.log("YouTube is in dark mode");
-          } else {
-            // YouTube is in light
-            setDark(false);
-            console.log("YouTube is in light mode");
-          }
-
-          setDisplayNone(true);
-          setError("");
-          setGlobalQuery(query);
-          setLoading(true);
-          setShowResults(false);
-
-          const urlParams = new URLSearchParams(
-            new URL(window.location.href).search
-          );
-
-          const vid = urlParams.get("vid");
-
-          const url = "https://hypersearch-i7nkqebqsa-uc.a.run.app/";
-
-          const normalTestPythonURL =
-            "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch/normal_hypersearch";
-
-          const streamedTestPythonURL =
-            "http://127.0.0.1:5001/skm-extension-official/us-central1/hypersearch_api/";
-
-          const livePythonURL =
-            "https://hypersearch-api-i7nkqebqsa-uc.a.run.app/normal_hypersearch";
-
-          const liveStreamedPythonAPIBase =
-            "https://hypersearch-api-i7nkqebqsa-uc.a.run.app/";
-
-          const testMode = false;
-          const apiUrl = testMode
-            ? streamedTestPythonURL
-            : liveStreamedPythonAPIBase;
-
-          let data = {
-            indexName: "video-embeddings",
-            videoID: vid,
-            query: query,
-            subscribedToPro: subscribedToPro,
-          };
-
-          fetch(`${apiUrl}new_streamed_hypersearch`, {
-            method: "POST",
-            cache: "no-cache",
-            keepalive: true,
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "text/event-stream",
-              Authorization: `Bearer ${idToken}`,
-            },
-            body: JSON.stringify(data),
-          })
-            .then(async (res) => {
-              // ... Your existing code for processing the response ...
-
-              const reader = res.body.getReader();
-
-              while (true) {
-                setLoading(true);
-                const { value, done } = await reader.read();
-                const decodedValue = new TextDecoder().decode(value);
-
-                // if (decodedValue.split('\n').filter(Boolean).length)
-                console.log("decodedValue", decodedValue);
-
-                if (done) {
-                  setLoading(false);
-                  break;
-                }
-                const response = JSON.parse(decodedValue);
-
-                const { responseCode, data } = response;
-
-                if (responseCode === "ERROR") {
-                  setError(response.data.errorMessage);
-                  console.log(response.data.errorMessage);
-                  alert(response.data.errorMessage);
-                  setLoading(false);
-                  break;
-                } else if (responseCode === "SUCCESS") {
-                  if (data.status) {
-                    //still in progress
-                    const { status } = data;
-
-                    switch (status) {
-                      case "PROCESSING_VIDEO":
-                        setUpsertProgress(0);
-                        setTimeout(() => {
-                          setUpsertProgress(25);
-                        }, 500);
-                        break;
-                      case "DONE_EMBEDDING":
-                        setUpsertProgress(75);
-                        break;
-                      case "STARTING_UPSERT":
-                        setUpsertProgress(85);
-                        break;
-                      case "DONE_UPSERT":
-                        setUpsertProgress(99);
-                        break;
-                      default:
-                        setUpsertProgress(1);
-                        break;
-                    }
-                  } else if (data.searchResult) {
-                    console.log(data);
-
-                    setUpsertProgress(99);
-
-                    setSummarizedResponse(data.summarizedResponse);
-                    setResults(data.searchResult.matches);
-
-                    setDisplayNone(false);
-
-                    setTimeout(() => {
-                      setLoading(false);
-                      setShowResults(true);
-                      setShowSummary(true);
-                    }, 300);
-
-                    setUpsertProgress(100);
-                    setUpsertProgress(-1);
-
-                    setTimeout(() => null, 2000);
-
-                    fetch(`${apiUrl}new_streamed_summarize`, {
-                      method: "POST",
-                      cache: "no-cache",
-                      keepalive: true,
-                      headers: {
-                        "Content-Type": "application/json",
-                        Accept: "text/event-stream",
-                        Authorization: `Bearer ${idToken}`,
-                      },
-                      body: JSON.stringify({
-                        query: query,
-                        results: data.searchResult.matches,
-                      }),
-                    })
-                      .then(async (res) => {
-                        const reader = res.body.getReader();
-
-                        while (true) {
-                          const { value, done } = await reader.read();
-                          const decodedValue = new TextDecoder().decode(value);
-
-                          console.log("decodedValue", decodedValue);
-
-                          if (done) {
-                            break;
-                          }
-
-                          setSummarizedResponse(decodedValue);
-                        }
-                      })
-                      .catch((err) => {
-                        // Handle fetch errors specifically
-                        console.error("Failed to get Summary error:", err);
-                        setSummarizedResponse(
-                          "Oops! There was an error getting the summarized response. Please try again or contact support."
-                        );
-                      });
-
-                    //end of get summarized response
-
-                    const userRef = doc(db, "users", user.uid);
-
-                    const update = await updateDoc(userRef, {
-                      searchesToday: increment(1),
-                      lifetimeSearches: increment(1),
-                    });
-
-                    setSearchesToday(searchesToday + 1);
-
-                    if (freeLimit - searchesToday < 1 && !isAdmin) {
-                      setLimitReached(true);
-                    }
-
-                    // getUserData2()
-                  }
-                }
-              }
-            })
-            .catch(async (err) => {
-              // Handle fetch errors specifically
-              console.error("Fetch error:", err);
-
-              const deleteVectors = await fetch(`${apiUrl}deleteVectorsPOST`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${idToken}`,
-                },
-                body: JSON.stringify({
-                  videoID: vid,
-                }),
-              })
-                .then((res) => res.json())
-                .then((data) => {
-                  console.log("Successfully removed stray vectors from db");
-                })
-                .catch((err) => {
-                  console.error("Could not remove stray vectors: ", err);
-                });
-
-              if (
-                err instanceof TypeError &&
-                err.message === "Failed to fetch"
-              ) {
-                // Network or CORS-related error
-                console.error(
-                  "Network or CORS-Related error. Could also be internal server error caused by faulty code. Check the API source."
-                );
-                setError(
-                  "Oops! It seems like we had an issue processing your search. Please check your internet connection or contact support."
-                );
-              } else {
-                // Other fetch-related errors
-                console.error(
-                  "Other fetch-related error. An error occurred while fetching the data. Please try again later or contact support."
-                );
-                setError(
-                  "Oops! It seems like we had an issue processing your search. Please check your internet connection or contact support."
-                );
-              }
-              setUpsertProgress(-1);
-              setLoading(false);
-
-              // You can also consider rethrowing the error for further handling or logging.
-              // throw err;
-            });
-        }}
+        onSubmit={handleSearch}
       />
 
       {upsertProgress !== -1 && upsertProgress !== 100 && loading && (
